@@ -11,6 +11,7 @@ import { useState } from 'react';
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [passwordError, setPasswordError] = useState(false)
     const [validPassword, setValidPassword] = useState(false)
 
     const handleClick = () => {
@@ -21,16 +22,17 @@ function LoginPage() {
         fetch('http://------------:8080/', {  // Enter correct address here
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(jsonData) 
+            body: JSON.stringify(jsonData)
         })
     }
 
     const checkPassword = (event) => {
         setPassword(event.target.value);
-        let correctLength = password.length >= 8 && password.length <=25;
+        let correctLength = password.length >= 8 && password.length <= 25;
         let hasUppercase = /[A-Z]/.test(password);
         let hasNumber = /\d/.test(password);
         setValidPassword(correctLength && hasNumber && hasUppercase)
+        setPasswordError(!validPassword)
     }
 
     return (
@@ -40,25 +42,37 @@ function LoginPage() {
             alignItems="center"
             minHeight="100vh"
         >
-            <Stack spacing={2}>
-                <Typography variant="h3">
-                    Login
-                </Typography>
-                <TextField id="email" label="Email" variant="outlined"
-                    onChange={((event) => {
-                        setEmail(event.target.value);
-                    })} />
-                <TextField id="password" label="Password" variant="outlined" type="password" 
-                    onChange={checkPassword} />
-                <Button
-                    variant="contained"
-                    onClick={handleClick}
-                    disabled ={!validPassword}
+                <Stack
+                    spacing={2}
+                    minWidth="30vh"
+                >
+                    <Typography variant='h2'>Welcome Back!</Typography>
+                    <TextField id="email" label="Email" variant="outlined"
+                        onChange={((event) => {
+                            setEmail(event.target.value);
+                        })} />
+                    <TextField error={passwordError}
+                        id="password"
+                        label="Password"
+                        variant="outlined"
+                        type="password"
+                        helperText={!passwordError ? "" : "Invalid password"}
+                        onChange={checkPassword} />
+                    <Stack maxWidth={300}>
+                        <Typography style={{ fontSize: '10px' }}>Password must be between 8-25 characters</Typography>
+                        <Typography style={{ fontSize: '10px' }}>Password must have 1 capital letter</Typography>
+                        <Typography style={{ fontSize: '10px' }}>Password must have 1 number</Typography>
+                    </Stack>
+                    <Button
+                        variant="contained"
+                        onClick={handleClick}
+                        disabled={!validPassword}
                     >
-                    Login
-                </Button>
-                <Button  variant="contained">Register</Button>
-            </Stack>
+                        Login
+                    </Button>
+                    <Typography style={{ textAlign: 'center' }}>Don't have an account?</Typography>
+                    <Button variant="contained">Register</Button>
+                </Stack>
         </Box>
     )
 }
