@@ -27,7 +27,7 @@ function LoginPage() {
 
     const checkPassword = (event) => {
         setPassword(event.target.value);
-        let correctLength = password.length >= 8;
+        let correctLength = password.length >= 8 && password.length <=25;
         let hasUppercase = /[A-Z]/.test(password);
         let hasNumber = /\d/.test(password);
         setValidPassword(correctLength && hasNumber && hasUppercase)
@@ -48,7 +48,7 @@ function LoginPage() {
                     onChange={((event) => {
                         setEmail(event.target.value);
                     })} />
-                <TextField id="password" label="Password" variant="outlined" type="password"
+                <TextField id="password" label="Password" variant="outlined" type="password" 
                     onChange={checkPassword} />
                 <Button
                     variant="contained"
