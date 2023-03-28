@@ -9,7 +9,7 @@ import FormControl from '@mui/material/FormControl';
 
 
 
-const prefrences = [
+const preferences = [
     {
         key: "noise",
         type: "",
@@ -24,13 +24,13 @@ const prefrences = [
     }
 ]
 
-const prefrenceList = prefrences.map((prefrence) => {
+const preferenceList = preferences.map((preference) => {
     return (
-        <Box key={prefrence.key}>
-            <Typography variant='h6' sx={{ color: 'white' }}>{prefrence.name}</Typography>
+        <Box key={preference.key}>
+            <Typography variant='h6' sx={{ color: 'white' }}>{preference.name}</Typography>
             <FormControl>
                 <RadioGroup row >
-                    {prefrence.values.map((value) => {
+                    {preference.values.map((value) => {
                         return (
                             <FormControlLabel
                                 key={value}
@@ -54,7 +54,7 @@ const prefrenceList = prefrences.map((prefrence) => {
 
 
 
-function PrefrencePage() {
+function PreferencePage() {
     return (
         <Box
             display="flex"
@@ -63,13 +63,13 @@ function PrefrencePage() {
             padding="100px"
         >
             <Stack>
-                <Typography variant="h2">Prefrence Selection</Typography>
+                <Typography variant="h2">Preference Selection</Typography>
                 <Stack>
-                    {prefrenceList}
+                    {preferenceList}
                 </Stack>
             </Stack>
         </Box>
     )
 }
 
-export default PrefrencePage
+export default PreferencePage
