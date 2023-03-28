@@ -1,4 +1,3 @@
-import './App.css';
 import {
   BrowserRouter,
   Routes,
@@ -10,13 +9,13 @@ import LoginPage from './pages/Login';
 function App() {
   return (
     <div >
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
