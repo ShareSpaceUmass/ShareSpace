@@ -11,6 +11,7 @@ import { useState } from 'react';
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [validPassword, setValidPassword] = useState(false)
 
     const handleClick = () => {
         let jsonData = {}
@@ -22,6 +23,14 @@ function LoginPage() {
             mode: 'cors',
             body: JSON.stringify(jsonData) 
         })
+    }
+
+    const checkPassword = (event) => {
+        setPassword(event.target.value);
+        let correctLength = password.length >= 8;
+        let hasUppercase = /[A-Z]/.test(password);
+        let hasNumber = /\d/.test(password);
+        setValidPassword(correctLength && hasNumber && hasUppercase)
     }
 
     return (
@@ -39,16 +48,16 @@ function LoginPage() {
                     onChange={((event) => {
                         setEmail(event.target.value);
                     })} />
-                <TextField id="password" label="Password" variant="outlined"
-                    onChange={((event) => {
-                        setPassword(event.target.value);
-                    })} />
+                <TextField id="password" label="Password" variant="outlined" type="password"
+                    onChange={checkPassword} />
                 <Button
                     variant="contained"
-                    onClick={handleClick}>
+                    onClick={handleClick}
+                    disabled ={!validPassword}
+                    >
                     Login
                 </Button>
-                <Button variant="contained">Create Account</Button>
+                <Button  variant="contained">Register</Button>
             </Stack>
         </Box>
     )
