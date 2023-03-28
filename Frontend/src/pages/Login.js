@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 
 
-export default function LoginPage() {
+function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -53,3 +53,5 @@ export default function LoginPage() {
         </Box>
     )
 }
+
+export default LoginPage
