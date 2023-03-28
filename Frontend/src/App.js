@@ -1,4 +1,3 @@
-import './App.css';
 import {
   BrowserRouter,
   Routes,
@@ -19,7 +18,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </BrowserRouter>
-      </div>
+    </div>
   );
 }
 
