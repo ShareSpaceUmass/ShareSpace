@@ -12,11 +12,11 @@ import Aos from 'aos';
 
 function LoginPage() {
     const [email, setEmail] = useState('')
-    /* Can be removed if there is no password
+
     const [password, setPassword] = useState('')
     const [passwordError, setPasswordError] = useState(false)
     const [validPassword, setValidPassword] = useState(false)
-    */
+    
 
     const handleClick = () => {
         let jsonData = {}
@@ -31,7 +31,7 @@ function LoginPage() {
         })
         */
     }
-    /* Can be removed if password is not used
+
     const checkPassword = (event) => {
         let tempPassword = event.target.value
         let correctLength = tempPassword.length >= 8 && tempPassword.length <= 25;
@@ -41,7 +41,7 @@ function LoginPage() {
         setValidPassword(correctLength && hasNumber && hasUppercase)
         setPasswordError(!(correctLength && hasNumber && hasUppercase))
     }
-    */
+    
     Aos.init({ duration: 1800, offset: 0});
     return (
         <Box
@@ -84,7 +84,7 @@ function LoginPage() {
                         }}
                     />
 
-                    {/* This can be removed if password is not used
+
                     <TextField error={passwordError}
                         id="password"
                         label="Password"
@@ -101,11 +101,11 @@ function LoginPage() {
                         <Typography style={{ fontSize: '10px' }}>Password must have 1 capital letter</Typography>
                         <Typography style={{ fontSize: '10px' }}>Password must have 1 number</Typography>
                     </Stack>
-                    */}
+
                     <Button
                         variant="contained"
                         onClick={handleClick}
-                        /*disabled={!validPassword}*/
+                        disabled={!validPassword}
                         color="secondary"
                     >
                         Login
