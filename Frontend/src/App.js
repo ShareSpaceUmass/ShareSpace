@@ -18,7 +18,6 @@ import PreferencePage from "./pages/Preferences";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline enableColorScheme />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
