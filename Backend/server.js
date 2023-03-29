@@ -1,7 +1,12 @@
 const express = require("express");
 const mysql = require("mysql2");
+const jwt = require("jsonwebtoken")
 const app = express();
 const port = '3000';
+
+app.use(express.json());
+// Should be moved
+const JWT_ACCESS_SECRET = "5e5e3cf59ab303a05498dede2e6063d9aee36a04de7e79b4cd50eba220b9e1e625c8f29769c6a1e3a199aa87facef6d6de118013cbd6ce1fb3912baa75658e79";
 
 //Connect
 const db = mysql.createConnection({
@@ -86,6 +91,18 @@ app.get('/getAllUsers', (req, res) => {
   });
 });
 
+// Verifies token given in URL
+app.get("/verify", (req, res) => {
+  const token = req.query.token;
+  if(token == null) res.sendStatus(401);
+  try{
+    const decodedToken = jwt.verify(token, JWT_ACCESS_SECRET);
+  }
+  catch(e){
+    res.sendStatus(401);
+  }
+  
+});
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
