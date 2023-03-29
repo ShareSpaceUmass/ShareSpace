@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
+import Aos from 'aos';
 
 
 
@@ -41,12 +42,14 @@ function LoginPage() {
         setPasswordError(!(correctLength && hasNumber && hasUppercase))
     }
     */
+    Aos.init({ duration: 1800, offset: 0});
     return (
         <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
             minHeight="100vh"
+            data-aos="fade-up"
         >
             <Stack
                 justifyContent="center"
