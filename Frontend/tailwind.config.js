@@ -5,6 +5,7 @@ module.exports = {
     fontFamily: {
       primary: 'Open Sans',
       secondary: 'Lato',
+      ubuntu: 'Ubuntu',
     },
     container: {
       padding: {
