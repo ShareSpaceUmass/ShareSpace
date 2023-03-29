@@ -5,6 +5,7 @@ const app = express();
 const port = '3000';
 
 app.use(express.json());
+
 // Should be moved
 const JWT_ACCESS_SECRET = "5e5e3cf59ab303a05498dede2e6063d9aee36a04de7e79b4cd50eba220b9e1e625c8f29769c6a1e3a199aa87facef6d6de118013cbd6ce1fb3912baa75658e79";
 
@@ -25,7 +26,7 @@ db.connect((err) => {
 
 
 //Create database
-app.get("/createDatabase", (req, res) => {
+app.post("/createDatabase", (req, res) => {
   let sql = 'CREATE DATABASE userDatabase';
   db.query(sql, (err, result) => {
     if(err) return console.error('error: ' + err.message);
@@ -35,13 +36,46 @@ app.get("/createDatabase", (req, res) => {
 });
 
 //Create table
-app.get('/createUserTable', (req, res) => {
+app.post('/createUserTable', (req, res) => {
   let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), password CHAR(30), username CHAR(20), bio VARCHAR(255))';
   db.query(sql, (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
     res.send("users table created!");
   });
+});
+
+//Handle reigstration
+app.post('/register', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  const email = req.body.email;
+  const bio = req.body.bio;
+
+  db.query(
+    "INSERT INTO users (email, password, username, bio) VALUES (?, ?, ?, ?)", [email, password, username, bio], 
+    (err, result) => {
+      if(err) return console.error('error: ' + err.message);
+      console.log(result);
+      res.send("user added!");
+    }
+  );
+});
+
+//Handle login
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  db.query(
+    'SELECT * FROM users WHERE username = ? AND password = ?', [username, password],
+    (err, result) => {
+      if(err) return console.error('error: ' + err.message);
+      if(result)
+        res.send(result);
+      else
+        res.send("Wrong username/password combination.");
+    }
+  );
 });
 
 //Insert user into users table
@@ -66,7 +100,7 @@ app.get('/getUser/:userId', (req, res) => {
 });
 
 //Upadate user from users table
-app.get('/updateUser/:userId/:field/:value', (req, res) => {
+app.post('/updateUser/:userId/:field/:value', (req, res) => {
   let value = req.params.value;
   let sql = 'UPDATE users SET ' + req.params.field + ' = ';
   if(typeof(value) == 'string')
