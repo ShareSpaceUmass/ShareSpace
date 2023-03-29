@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
     return (
-        <div>
-            <p>About Us, Features,<Link to="/signup"> Signup</Link></p>
+        <div className='px-16 bg-[#f7eeff] py-2'>
+            <p className="font-ubuntu">About Us | Features | <Link to="/signup"> Signup</Link></p>
         </div>
     )
 }
