@@ -1,8 +1,7 @@
-import React from 'react'
-import { HeroData } from '../data'
+import React from 'react';
+import { HeroData } from '../data';
 import { Link } from "react-router-dom";
-
-import Header from '../components/Header'
+import Header from '../components/Header';
 
 const Hero = () => {
     const { title, subtitle, btnText, img } = HeroData
@@ -15,7 +14,9 @@ const Hero = () => {
                         {/* Text */}
                         <h1 className="h1 xl:max-w-[600px] mb-6 lg:mb-8 font-ubuntu" data-aos='fade-down' data-aos-delay='400'>{title}</h1>
                         <p className="lead xl:max-w-[380px] mb-6 lg:mb-8 font-ubuntu" data-aos='fade-down' data-aos-delay='500'>{subtitle}</p>
-                        <button className="btn btn-primary mb-8 xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>{btnText}</button>
+                        <form action="/signup">
+                        <button className="btn btn-primary mb-8 xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' type="submit">{btnText}</button>
+                        </form>
                     </div>
                     <div className='sm:w-[350px] xl:absolute xl:-right-12 xl:bottom-6 xl:w-[680px]' data-aos='fade-up' data-aos-delay='700'>
                         {/* Image */}
