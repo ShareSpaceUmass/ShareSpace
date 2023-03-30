@@ -114,6 +114,7 @@ function LoginPage() {
                     <Button
                         variant="contained"
                         color="secondary"
+                        href="/signup"
                     >Register</Button>
                 </Stack>
             </Stack>
