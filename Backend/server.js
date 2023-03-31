@@ -1,4 +1,6 @@
 const express = require("express");
+const sendGridMailer = require("@sendgrid/mail")
+sendGridMailer.setApiKey(process.env.SENT_GRID_API_KEY)
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken")
 const app = express();
@@ -77,6 +79,33 @@ app.post('/login', (req, res) => {
     }
   );
 });
+
+app.post("/login", async (req, res) => {
+  const user = USERS.find(u => u.email === req.body.email)
+
+  if (user != null) {
+    try {
+      const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      })
+      await sendMagicLinkEmail({email: user.email, token})
+    } catch (e) {
+      return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send a 
+                                                            //json with this message up the chain
+    }
+  }
+
+  res.json("Check your email to finish logging in")
+})
+
+function sendMagicLinkEmail({email, token}) {
+  return sendGridMailer.send({
+    to: email,
+    from: process.env.FROM_EMAIL,
+    subject: "Finish Logging In",
+    html: `<a href = "http://localhost:3000/verify?token=${token}">Log in</a>`,
+  })
+}
 
 //Insert user into users table
 app.get('/setUser', (req, res) => {
