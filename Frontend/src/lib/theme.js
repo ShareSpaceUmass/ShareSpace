@@ -2,13 +2,8 @@ import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
     palette: {
-      mode: 'dark',
-      background: {
-        paper: '#18131a',
-        default: '#120214',
-      },
       text: {
-        primary: '#B77BF3',
+        primary: '#2d103b',
         link: '#DFB2E4'
       },
       primary: {
@@ -18,6 +13,13 @@ const theme = createTheme({
         main:'#B77BF3'
       }
     },
+    typography: {
+      "fontFamily":'Ubuntu',
+      "fontSize": 14,
+      "fontWeightLight": 300,
+      "fontWeightRegular": 400,
+      "fontWeightMedium": 500
+     }
 });
 
 
