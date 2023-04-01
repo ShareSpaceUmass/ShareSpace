@@ -20,6 +20,9 @@ function LoginPage() {
         const response = fetch('http://localhost:3000/login', {  
             method: 'POST',
             mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(emailJson)
         })
         response.then((res) => res.json())
