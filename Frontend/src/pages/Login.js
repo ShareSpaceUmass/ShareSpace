@@ -12,6 +12,12 @@ import Aos from 'aos';
 
 function LoginPage() {
     const [email, setEmail] = useState('')
+    const [validEmail, setValidEmail] = useState(false)
+
+    const checkEmail = (input) => {
+        setEmail(input)
+        setValidEmail(input.endsWith("@umass.edu"))
+    }
     
 
     const handleClick = () => {
@@ -65,7 +71,7 @@ function LoginPage() {
                         id="email"
                         label="Email"
                         variant="outlined"
-                        onChange={(event) => { setEmail(event.target.value) }}
+                        onChange={(event) => { checkEmail(event.target.value) }}
                         onKeyDown={setEmail}
                         InputLabelProps={{
                             style: { color: '#B77BF3' },
@@ -75,6 +81,7 @@ function LoginPage() {
                         variant="contained"
                         onClick={handleClick}
                         color="secondary"
+                        disabled = {!validEmail}
                     >
                         Login
                     </Button>
