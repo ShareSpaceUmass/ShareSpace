@@ -12,35 +12,19 @@ import Aos from 'aos';
 
 function LoginPage() {
     const [email, setEmail] = useState('')
-
-    const [password, setPassword] = useState('')
-    const [passwordError, setPasswordError] = useState(false)
-    const [validPassword, setValidPassword] = useState(false)
     
 
     const handleClick = () => {
         let jsonData = {}
         jsonData.email = email
-        //jsonData.password = password
         console.log(JSON.stringify(jsonData))
-        /*
-        fetch('http://------------:8080/', {  // Enter correct address here
+        fetch('http://localhost:3000/login', {  // Enter correct address here
             method: 'POST',
             mode: 'cors',
             body: JSON.stringify(jsonData)
         })
-        */
     }
 
-    const checkPassword = (event) => {
-        let tempPassword = event.target.value
-        let correctLength = tempPassword.length >= 8 && tempPassword.length <= 25;
-        let hasUppercase = /[A-Z]/.test(tempPassword);
-        let hasNumber = /\d/.test(tempPassword);
-        setPassword(tempPassword);
-        setValidPassword(correctLength && hasNumber && hasUppercase)
-        setPasswordError(!(correctLength && hasNumber && hasUppercase))
-    }
     
     Aos.init({ duration: 1800, offset: 0});
     return (
@@ -83,29 +67,9 @@ function LoginPage() {
                             style: { color: '#B77BF3' },
                         }}
                     />
-
-
-                    <TextField error={passwordError}
-                        id="password"
-                        label="Password"
-                        variant="outlined"
-                        type="password"
-                        helperText={!passwordError ? "" : "Invalid password"}
-                        onChange={checkPassword}
-                        InputLabelProps={{
-                            style: { color: '#B77BF3' },
-                        }}
-                    /> 
-                    <Stack maxWidth={300}>
-                        <Typography style={{ fontSize: '10px' }}>Password must be between 8-25 characters</Typography>
-                        <Typography style={{ fontSize: '10px' }}>Password must have 1 capital letter</Typography>
-                        <Typography style={{ fontSize: '10px' }}>Password must have 1 number</Typography>
-                    </Stack>
-
                     <Button
                         variant="contained"
                         onClick={handleClick}
-                        disabled={!validPassword}
                         color="secondary"
                     >
                         Login
