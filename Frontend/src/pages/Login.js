@@ -15,14 +15,15 @@ function LoginPage() {
     
 
     const handleClick = () => {
-        let jsonData = {}
-        jsonData.email = email
-        console.log(JSON.stringify(jsonData))
-        fetch('http://localhost:3000/login', {  // Enter correct address here
+        const emailJson = {email}
+
+        const response = fetch('http://localhost:3000/login', {  
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(jsonData)
+            body: JSON.stringify(emailJson)
         })
+        response.then((res) => res.json())
+        .then((data) => console.log(data))
     }
 
     
