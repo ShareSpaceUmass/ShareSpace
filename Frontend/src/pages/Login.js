@@ -23,7 +23,7 @@ function LoginPage() {
     const handleClick = () => {
         const emailJson = {email}
 
-        const response = fetch('http://localhost:3000/login', {  
+        const response = fetch('http://localhost:3000/users/login', {  
             method: 'POST',
             mode: 'cors',
             headers: {
