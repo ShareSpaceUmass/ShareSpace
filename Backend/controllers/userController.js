@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const db = require('../server')
-const { sendMagicLinkEmail } = require('./middleware/sendLink')
+const { sendMagicLinkEmail } = require('../middleware/sendLink')
 
 // @desc   Register a new user
 // @route  POST /users
@@ -22,7 +22,7 @@ const registerUser = (req,res) => {
 // @desc   Authenticate a user
 // @route  POST /users/login
 // @access Public
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
     const user = USERS.find(u => u.email === req.body.email)
 
     if (user != null) {

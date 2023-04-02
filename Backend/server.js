@@ -14,8 +14,8 @@ app.use(cors());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '',
-  database: 'userDatabase'
+  password: 'april2002',
+  database: 'giraffe'
 });
 
 db.connect((err) => {
@@ -25,6 +25,12 @@ db.connect((err) => {
   console.log('Connected to the MySQL server.');
 });
 
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+});
+
+// All user routes contained in /routes/userRoutes
+app.use('/users', require('./routes/userRoutes'))
 
 // Create database
 app.post("/createDatabase", (req, res) => {
@@ -46,8 +52,10 @@ app.post('/createUserTable', (req, res) => {
   });
 });
 
-// All user routes contained /routes/userRoutes
-app.use('/users', require('./routes/userRoutes'))
+
+app.get('/', (req,res) => {
+  res.send("Home")
+})
 
 // Verifies token given in URL
 app.get("/verify", (req, res) => {
@@ -62,8 +70,5 @@ app.get("/verify", (req, res) => {
   
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-});
 
 module.exports = db; 
