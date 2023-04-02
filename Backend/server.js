@@ -3,11 +3,12 @@ const sendGridMailer = require("@sendgrid/mail")
 sendGridMailer.setApiKey(process.env.SENT_GRID_API_KEY)
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken")
+const cors = require("cors");
 const app = express();
 const port = '3000';
 
 app.use(express.json());
-
+app.use(cors());
 // Should be moved
 const JWT_ACCESS_SECRET = "5e5e3cf59ab303a05498dede2e6063d9aee36a04de7e79b4cd50eba220b9e1e625c8f29769c6a1e3a199aa87facef6d6de118013cbd6ce1fb3912baa75658e79";
 
@@ -65,23 +66,10 @@ app.post('/register', (req, res) => {
 });
 
 //Handle login
-app.post('/login', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  db.query(
-    'SELECT * FROM users WHERE username = ? AND password = ?', [username, password],
-    (err, result) => {
-      if(err) return console.error('error: ' + err.message);
-      if(result)
-        res.send(result);
-      else
-        res.send("Wrong username/password combination.");
-    }
-  );
-});
 
 app.post("/login", async (req, res) => {
-  const user = USERS.find(u => u.email === req.body.email)
+
+  const user = USERS.find(u => u.email === req)
 
   if (user != null) {
     try {

@@ -12,17 +12,27 @@ import Aos from 'aos';
 
 function LoginPage() {
     const [email, setEmail] = useState('')
+    const [validEmail, setValidEmail] = useState(false)
+
+    const checkEmail = (input) => {
+        setEmail(input)
+        setValidEmail(input.endsWith("@umass.edu"))
+    }
     
 
     const handleClick = () => {
-        let jsonData = {}
-        jsonData.email = email
-        console.log(JSON.stringify(jsonData))
-        fetch('http://localhost:3000/login', {  // Enter correct address here
+        const emailJson = {email}
+
+        const response = fetch('http://localhost:3000/login', {  
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(jsonData)
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(emailJson)
         })
+        response.then((res) => res.json())
+        .then((data) => console.log(data))
     }
 
     
@@ -61,7 +71,7 @@ function LoginPage() {
                         id="email"
                         label="Email"
                         variant="outlined"
-                        onChange={(event) => { setEmail(event.target.value) }}
+                        onChange={(event) => { checkEmail(event.target.value) }}
                         onKeyDown={setEmail}
                         InputLabelProps={{
                             style: { color: '#B77BF3' },
@@ -71,6 +81,7 @@ function LoginPage() {
                         variant="contained"
                         onClick={handleClick}
                         color="secondary"
+                        disabled = {!validEmail}
                     >
                         Login
                     </Button>
