@@ -14,16 +14,17 @@ function LoginPage() {
     const [email, setEmail] = useState('')
     const [validEmail, setValidEmail] = useState(false)
 
+    //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
         setEmail(input)
         setValidEmail(input.endsWith("@umass.edu"))
     }
-    
 
+    //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = () => {
-        const emailJson = {email}
+        const emailJson = { email }
 
-        const response = fetch('http://localhost:3000/login', {  
+        const response = fetch('http://localhost:3000/login', {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -32,11 +33,11 @@ function LoginPage() {
             body: JSON.stringify(emailJson)
         })
         response.then((res) => res.json())
-        .then((data) => console.log(data))
+            .then((data) => console.log(data))
     }
 
-    
-    Aos.init({ duration: 1800, offset: 0});
+
+    Aos.init({ duration: 1800, offset: 0 });
     return (
         <Box
             display="flex"
@@ -81,7 +82,7 @@ function LoginPage() {
                         variant="contained"
                         onClick={handleClick}
                         color="secondary"
-                        disabled = {!validEmail}
+                        disabled={!validEmail}
                     >
                         Login
                     </Button>
