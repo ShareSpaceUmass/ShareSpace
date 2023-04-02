@@ -32,7 +32,7 @@ const loginUser = async (req, res) => {
         })
         await sendMagicLinkEmail({email: user.email, token})
       } catch (e) {
-        return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send a 
+        return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
                                                               //json with this message up the chain
       }
     }
@@ -83,10 +83,12 @@ const updateUserData = (req, res) => {
 }
 
 
+
+
 module.exports = {
     registerUser,
     loginUser,
     getUser,
     updateUserData,
-    getAllUsers
+    getAllUsers,
 }
