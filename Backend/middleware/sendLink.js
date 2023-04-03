@@ -1,8 +1,9 @@
-const sendGridMailer = require("@sendgrid/mail")
-sendGridMailer.setApiKey(process.env.SENT_GRID_API_KEY)
+const sgMail = require("@sendgrid/mail")
+const dotenv = require('dotenv').config();
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-function sendMagicLinkEmail({email, token}) {
-    return sendGridMailer.send({
+function sendMagicLinkEmail(email, token) {
+    return sgMail.send({
       to: email,
       from: process.env.FROM_EMAIL,
       subject: "Finish Logging In",
