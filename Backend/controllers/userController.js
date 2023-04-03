@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken")
 const db = require('../server')
+const dotenv = require('dotenv').config();
+
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
 
 // @desc   Register a new user
@@ -23,15 +25,16 @@ const registerUser = (req,res) => {
 // @route  POST /users/login
 // @access Public
 const loginUser = async (req, res) => {
-    const user = USERS.find(u => u.email === req.body.email)
-
+    let user;
+    getUser(req.body.email, user)
     if (user != null) {
       try {
-        const token = jwt.sign({userId: user.id}, process.env.JWT_SECRET, {
+        const token = jwt.sign({userId: req.body.email}, process.env.JWT_SECRET, {
           expiresIn: "1h",
         })
-        await sendMagicLinkEmail({email: user.email, token})
+        await sendMagicLinkEmail(req.body.email, token)
       } catch (e) {
+        console.log(e)
         return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
                                                               //json with this message up the chain
       }

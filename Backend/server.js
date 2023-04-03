@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken")
 const cors = require("cors");
+const { getUser } = require("./controllers/userController");
 const dotenv = require('dotenv').config();
 const app = express();
 const port = '3000';
@@ -62,7 +63,10 @@ app.get("/verify", (req, res) => {
   const token = req.query.token;
   if(token == null) res.sendStatus(401);
   try{
-    const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    let user;
+    getUser(decodedToken, user);
+    res.send(`Authed as ${user}`)
   }
   catch(e){
     res.sendStatus(401);
