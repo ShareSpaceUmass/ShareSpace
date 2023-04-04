@@ -43,9 +43,9 @@ app.post("/createDatabase", (req, res) => {
   })
 });
 
-// Create table
+// Create users table
 app.post('/createUserTable', (req, res) => {
-  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), password CHAR(30), username CHAR(20), bio VARCHAR(255))';
+  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), username CHAR(20), bio VARCHAR(255))';
   db.query(sql, (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
@@ -53,6 +53,35 @@ app.post('/createUserTable', (req, res) => {
   });
 });
 
+// Delete users table
+app.post('/deleteUserTable', (req, res) => {
+  let sql = 'DROP TABLE users';
+  db.query(sql, (err, result) => {
+    if(err) return console.error('error: ' + err.message);
+    console.log(result);
+    res.send("users table deleted!");
+  });
+});
+
+// Create messages table
+app.post('/createMessageTable', (req, res) => {
+  let sql = 'CREATE TABLE messages(id INT Primary KEY AUTO_INCREMENT, sender CHAR(20), receiver CHAR(20), content VARCHAR(255))';
+  db.query(sql, (err, result) => {
+    if(err) return console.error('error: ' + err.message);
+    console.log(result);
+    res.send("messages table created!");
+  });
+});
+
+// Delete messages table
+app.post('/deleteMessageTable', (req, res) => {
+  let sql = 'DROP TABLE messages';
+  db.query(sql, (err, result) => {
+    if(err) return console.error('error: ' + err.message);
+    console.log(result);
+    res.send("messages table deleted!");
+  });
+});
 
 app.get('/', (req,res) => {
   res.send("Home")
