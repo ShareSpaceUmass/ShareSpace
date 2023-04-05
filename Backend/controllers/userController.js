@@ -14,7 +14,7 @@ const registerUser = (req,res) => {
   const gender = req.body.gender;
 
   db.query(
-    "INSERT INTO users (email, fName, lName, gender) VALUES (?, ?, ?, ?, ?)", [email, fName, lName, gender], 
+    "INSERT INTO users (email, fName, lName, gender) VALUES (?, ?, ?, ?)", [email, fName, lName, gender], 
     (err, result) => {
       if(err) return console.error('registration error: ' + err.message);
       console.log(result);
