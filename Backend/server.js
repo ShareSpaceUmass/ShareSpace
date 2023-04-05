@@ -45,7 +45,8 @@ app.post("/createDatabase", (req, res) => {
 
 // Create users table
 app.post('/createUserTable', (req, res) => {
-  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), username CHAR(20), bio VARCHAR(255))';
+  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), username CHAR(20), \
+  gender CHAR(20), age int, bio VARCHAR(255))';
   db.query(sql, (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);

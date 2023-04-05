@@ -85,9 +85,6 @@ const updateUserData = (req, res) => {
     });
 }
 
-
-
-
 module.exports = {
     registerUser,
     loginUser,
