@@ -8,11 +8,13 @@ const { sendMagicLinkEmail } = require('../middleware/sendLink')
 // @route  POST /users
 // @access Public
 const registerUser = (req,res) => {
-  const username = req.body.username;
+  const fName = req.body.fName;
+  const lName = req.body.lName;
   const email = req.body.email;
+  const gender = req.body.gender;
 
   db.query(
-    "INSERT INTO users (email, username) VALUES (?, ?)", [email, username], 
+    "INSERT INTO users (email, fName, lName, gender) VALUES (?, ?, ?, ?, ?)", [email, fName, lName, gender], 
     (err, result) => {
       if(err) return console.error('registration error: ' + err.message);
       console.log(result);
