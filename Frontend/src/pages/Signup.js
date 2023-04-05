@@ -15,33 +15,19 @@ import { useState } from 'react';
 import Aos from 'aos';
 
 function SignupPage() {
-    const [name, setName] = useState('')
+    const [fName, setFirstName] = useState('')
+    const [lName, setLastName] = useState('')
     const [email, setEmail] = useState('')
     const [gender, setGender] = useState('')
-    const [birth, setBirth] = useState('')
     const [emailError, setEmailError] = useState(false)
 
+    const checkEmail = (input) => {
+      setEmail(input)
+      setEmailError(!input.endsWith("@umass.edu"))
+    }
 
-    const years = Array.from(
-      { 23: (35-13)/ 1 + 1},
-      (value, index) => 13 + index * 1
-      );
-    
-    console.log(years);
-
-    const birthYears = years.forEach(yr => {
-      return ( 
-        <>
-        <MenuItem value={yr}>yr</MenuItem>
-        </>
-      );
-    });
-      
-
-    const checkEmail = (event) => {
-      let email = event.target.value;
-      let validEmail = email.length >= 10 && (email.substring(email.length-10) === "@umass.edu");
-      setEmailError(!validEmail)
+    const missingInfo = () => {
+      return (fName == '') || (lName == '') || (email == '') || (gender == '')
     }
 
     Aos.init({ duration: 1800, offset: 0});
@@ -80,53 +66,74 @@ function SignupPage() {
             <Grid
             container
             direction="row"
-            justifyContent="space-evenly"
             alignItems="center"
-            marginLeft={30}
-            marginRight={30}
-            spacing={6}
-            marginTop={5}
+            justifyContent="center"
+            spacing={{xs:3, md:6}}
+            marginTop={{xs:0, md:0}}
+            sx={{
+              maxHeight: { xs: 900, md: 200 },
+              maxWidth: { xs: 250, md: 1000 },
+            }}
             >
-                <Grid item xs={3} md={6}>
+                <Grid item xs={12} md={6}>
                     <TextField
-                    id="name"
-                    label="Name"
+                    id="fName"
+                    label="First Name"
                     variant="outlined"
-                    onChange={(event) => { setName(event.target.value) }}
-                    onKeyDown={setName}
+                    onChange={(event) => setFirstName(event.target.value)}
                     InputLabelProps={{
                     style: { color: '#B77BF3' },
                     }}
                     sx={{
                       width:400,
-                      maxHeight: { xs: 100, md: 200 },
-                      maxWidth: { xs: 250, md: 491 },
+                      maxHeight: { xs: 200, md: 200 },
+                      maxWidth: { xs: 200, md: 400 },
                     }}
                     />
                 </Grid>
-                <Grid item xs={3} md={6}>
+                <Grid item xs={12} md={6}>
+                    <TextField
+                    id="lName"
+                    label="Last Name"
+                    variant="outlined"
+                    onChange={(event) => setLastName(event.target.value)}
+                    InputLabelProps={{
+                    style: { color: '#B77BF3' },
+                    }}
+                    sx={{
+                      width:400,
+                      maxHeight: { xs: 200, md: 200 },
+                      maxWidth: { xs: 200, md: 400 },
+                    }}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
                     <TextField error={emailError}
                     id="email"
                     label="Email"
                     variant="outlined"
-                    onChange={checkEmail}
+                    onChange={
+                      (event) => {
+                        checkEmail(event.target.value)
+                      }
+                    }
                     helperText={!emailError ? "" : "Email must end in @umass.edu"}
                     InputLabelProps={{
                     style: { color: '#B77BF3' },
                     }}
                     sx={{
                       width:400,
-                      maxHeight: { xs: 100, md: 200 },
-                      maxWidth: { xs: 250, md: 491 },
+                      maxHeight: { xs: 200, md: 200 },
+                      maxWidth: { xs: 200, md: 400 },
                     }}
                     />
                 </Grid>
-                <Grid item xs={3} md={6}>
+                <Grid item xs={12} md={6}>
                     <FormControl
                     sx={{
                         width:400,
-                        maxHeight: { xs: 100, md: 200 },
-                        maxWidth: { xs: 250, md: 491 },
+                        maxHeight: { xs: 200, md: 200 },
+                        maxWidth: { xs: 200, md: 400 },
                     }}>
                     <InputLabel id="gender" 
                     sx={{
@@ -140,34 +147,23 @@ function SignupPage() {
                     id="gender"
                     value={gender}
                     label="Gender Year"
-                    onChange={setGender}
+                    onChange={(event) => setGender(event.target.value)}
                     >
-                    <MenuItem value={"male"}>Male</MenuItem>
-                    <MenuItem value={"female"}>Female</MenuItem>
-                    <MenuItem value={"non-binary"}>Non-Binary</MenuItem>
-                    </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={3} md={6}>
-                    <FormControl
-                    sx={{
-                    width:400,
-                    maxHeight: { xs: 100, md: 200 },
-                    maxWidth: { xs: 250, md: 491 },
-                    }}>
-                    <InputLabel id="age" 
-                    sx={{
-                      color: '#B77BF3',
-                    }}
+                    <MenuItem 
+                    value={"male"}
                     >
-                    Age
-                    </InputLabel>
-                    <Select
-                    labelId="age"
-                    id="age"
-                    label="age"
+                    Male
+                    </MenuItem>
+                    <MenuItem 
+                    value={"female"}
                     >
-                    {birthYears}
+                    Female
+                    </MenuItem>
+                    <MenuItem 
+                    value={"non-binary"}
+                    >
+                    Non-Binary
+                    </MenuItem>
                     </Select>
                     </FormControl>
                 </Grid>
@@ -184,8 +180,7 @@ function SignupPage() {
             >
                 <Button
                 variant="contained"
-                //onClick={handleClick}
-                //disabled={!validPassword}
+                disabled={missingInfo() || emailError}
                 color="secondary"
                 sx={{
                   width:250,
