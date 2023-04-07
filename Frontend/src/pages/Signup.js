@@ -145,7 +145,7 @@ function SignupPage() {
                         maxHeight: { xs: 200, md: 200 },
                         maxWidth: { xs: 300, md: 400 },
                     }}>
-                    <InputLabel id="gender" 
+                    <InputLabel selected id="gender" 
                     sx={{
                       color: '#B77BF3',
                     }}
@@ -153,10 +153,9 @@ function SignupPage() {
                     Gender
                     </InputLabel>
                     <Select
-                    labelId="Gender"
                     id="gender"
                     value={gender}
-                    label="Gender Year"
+                    label="Gender"
                     onChange={(event) => setGender(event.target.value)}
                     >
                     <MenuItem 
