@@ -1,8 +1,7 @@
-import React from 'react'
-import { HeroData } from '../data'
+import React from 'react';
+import { HeroData } from '../data';
 import { Link } from "react-router-dom";
-
-import Header from '../components/Header'
+import Header from '../components/Header';
 
 const Hero = () => {
     const { title, subtitle, btnText, img } = HeroData
