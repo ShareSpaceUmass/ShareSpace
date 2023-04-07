@@ -8,7 +8,7 @@ function Profile() {
         <div className='h-screen py-8'>
             
             <div className='items-center h-screen'>
-                <div className='flex mx-auto my-10 p-8 bg-gradient-to-b from-[#ffffff9b] to-[#ffffff00] relative w-[85%] h-[15%] rounded-3xl'>
+                <div className='flex mx-auto my-10 p-8 bg-gradient-to-b from-[#ffffff96] to-[#ffffff00] relative w-[85%] h-[15%] rounded-3xl'>
                     <div className='w-[90px] h-[90px] my-7 mx-20'>
                         <img
                             src="https://api.dicebear.com/6.x/initials/svg?seed=JohnDoe"
