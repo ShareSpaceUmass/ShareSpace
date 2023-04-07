@@ -10,9 +10,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from "@mui/material"
 import theme from './lib/theme.js'
 import PreferencePage from "./pages/Preferences";
-
-
-
+import ProfilePage from  "./pages/Profile"
 
 
 function App() {
@@ -24,6 +22,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/preferences" element={<PreferencePage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
