@@ -20,7 +20,7 @@ function ChatPage() {
                     <Grid container spacing={1}>
                         <Grid md={3} data-aos="fade-up">
                             <Stack
-                                height="75vh"
+                                height="74.5vh"
                                 sx={{
                                     padding: '16px',
                                     boxShadow: 3,
