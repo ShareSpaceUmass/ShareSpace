@@ -58,6 +58,7 @@ function ChatPage() {
                                             id="outlined-basic"
                                             variant="outlined"
                                             multiline
+                                            maxRows="3"
                                             sx={{ boxShadow: 3, backgroundColor: "#FFFFFF" }}
                                         />
                                     </Grid>
