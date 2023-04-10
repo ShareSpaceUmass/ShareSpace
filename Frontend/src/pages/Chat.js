@@ -1,16 +1,9 @@
-import { Grid, Container, Box, Stack, Typography, IconButton, TextField, Divider } from "@mui/material"
+import { Grid, Container, Box, Stack, Typography, IconButton, TextField, Divider, Paper } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import Header from "../components/Header";
 import Aos from "aos";
 
-const borderStyles = {
-    borderRadius: '10px',
-    border: 1,
-    borderColor: 'primary.main',
-    m: 1,
-    borderWidth: '5px',
-    padding: '16px'
-};
+
 
 function ChatPage() {
     Aos.init({ duration: 1000, offset: 0 });
@@ -26,20 +19,38 @@ function ChatPage() {
                 <Container maxWidth="md">
                     <Grid container spacing={1}>
                         <Grid md={3} data-aos="fade-up">
-                            <Stack minHeight="75vh" sx={borderStyles}>
+                            <Stack
+                                height="75vh"
+                                sx={{
+                                    padding: '16px',
+                                    boxShadow: 3,
+                                    borderRadius: "4px",
+                                    backgroundColor: "#FFFFFF"
+                                }}
+                            >
                                 <Typography>Test</Typography>
                             </Stack>
                         </Grid>
                         <Grid md={9} data-aos="fade-down">
-                            <Stack
-                                minHeight="75vh"
-                                maxHeight="75vh"
-                                sx={borderStyles}
+                            <Box
+                                height="75vh"
+                                sx={{ paddingLeft: '16px' }}
                                 display="flex"
-                                justifyContent="flex-end"
+                                flexDirection="column"
+                                justifyContent='flex-end'
                             >
-                                <Box></Box>
-                                <Divider />
+                                <Box
+                                    sx={{
+                                        borderRadius: "4px",
+                                        boxShadow: 3,
+                                        backgroundColor: "#FFFFFF",
+                                        marginRight: "52px",
+                                        height: "100%",
+                                        marginBottom: "16px"
+                                    }}
+                                >
+                                    Test
+                                </Box>
                                 <Grid container>
                                     <Grid md={11}>
                                         <TextField
@@ -47,6 +58,7 @@ function ChatPage() {
                                             id="outlined-basic"
                                             variant="outlined"
                                             multiline
+                                            sx={{ boxShadow: 3, backgroundColor: "#FFFFFF" }}
                                         />
                                     </Grid>
                                     <Grid md={1}>
@@ -55,12 +67,12 @@ function ChatPage() {
                                         </IconButton>
                                     </Grid>
                                 </Grid>
-                            </Stack>
+                            </Box>
                         </Grid>
                     </Grid>
                 </Container>
             </Box>
-        </Stack>
+        </Stack >
     )
 }
 
