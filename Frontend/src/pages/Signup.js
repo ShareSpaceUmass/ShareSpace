@@ -33,7 +33,7 @@ function SignupPage() {
     const register = () => {
       const user = {fName, lName, email, gender}
 
-      const response = fetch('http://localhost:4000/users/signup', {  
+      const response = fetch('http://localhost:3000/users/signup/', {  
           method: 'POST',
           headers: {
               'Content-Type': 'application/json' },
