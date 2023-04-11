@@ -1,6 +1,7 @@
 import { Grid, Container, Box, Stack, Typography, IconButton, TextField, Divider, Paper } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
 import Header from "../components/Header";
+import ChatWidget from "../components/chatbox-components/ChatWidget";
 import Aos from "aos";
 
 
@@ -28,7 +29,7 @@ function ChatPage() {
                                     backgroundColor: "#FFFFFF"
                                 }}
                             >
-                                <Typography>Test</Typography>
+                                <ChatWidget />
                             </Stack>
                         </Grid>
                         <Grid md={9} data-aos="fade-down">
