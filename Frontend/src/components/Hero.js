@@ -1,8 +1,8 @@
 import React from 'react';
-import Lottie from "lottie-react";
 import { HeroData } from '../data';
 import { Link } from "react-router-dom";
 import Header from '../components/Header';
+import Lottie from "lottie-react";
 import landingAnim from "../assets/landing-anim.json";
 
 const Hero = () => {
