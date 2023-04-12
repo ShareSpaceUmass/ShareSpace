@@ -49,8 +49,7 @@ const loginUser = async (req, res) => {
 // @route  GET /getUser/:userId
 // @access Private
 const getUser = (req,res) => {
-    let sql = 'SELECT * FROM users WHERE id ='+ req.params.userId;
-    db.query(sql, (err, result) => {
+    db.query('SELECT * FROM users WHERE id = ?', [req.params.userId], (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
     res.send("user fetched!");
@@ -74,13 +73,9 @@ const getAllUsers = (req, res) => {
 // @access Private
 const updateUserData = (req, res) => {
     let value = req.params.value;
-    let sql = 'UPDATE users SET ' + req.params.field + ' = ';
-    if(typeof(value) == 'string')
-      sql += '\'' + req.params.value + '\'' + ' WHERE id = ' + req.params.userId;
-    else
-      sql += req.params.value + ' WHERE id = '+ req.params.userId;
-  
-    db.query(sql, (err, result) => {
+    let userId = req.params.userId;
+    let field = req.params.field;
+    db.query('UPDATE users SET ? = ? WHERE id = ?', [field, value, userId], (err, result) => {
       if(err) return console.error('error: ' + err.message);
       console.log(result);
       res.send("user updated!");
