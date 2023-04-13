@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
 
+
 // @desc   Register a new user
 // @route  POST /users
 // @access Public

@@ -19,16 +19,17 @@ const db = mysql.createConnection({
   database: 'giraffe'
 });
 
+
 db.connect((err) => {
   if (err) {
     return console.error('error: ' + err.message);
   }
   console.log('Connected to the MySQL server.');
 });
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
 
 // All user routes contained in /routes/userRoutes
 app.use('/users', require('./routes/userRoutes'))
