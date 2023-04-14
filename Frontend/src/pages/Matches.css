@@ -1,13 +1,15 @@
 .pin{
   border-radius: 16px;
-  background-color: rgb(245, 236, 245);
-  margin: 5px;
+  background-color: rgb(255, 254, 255);
+  margin: 0.5rem;
+  padding: 10px;
   position:relative;
-  overflow:hidden;
 }
 
+.pin:hover{
+  box-shadow: 2px 0px 2px 3px rgb(16, 5, 24);
+}
 
 .pin .mainPic{
   width:100%;
-  object-fit: contain;
 }

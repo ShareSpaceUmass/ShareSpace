@@ -12,37 +12,32 @@ import Aos from 'aos';
 
 function LoginPage() {
     const [email, setEmail] = useState('')
-    /* Can be removed if there is no password
-    const [password, setPassword] = useState('')
-    const [passwordError, setPasswordError] = useState(false)
-    const [validPassword, setValidPassword] = useState(false)
-    */
+    const [validEmail, setValidEmail] = useState(false)
 
+    //Verifies input ends with @umass.edu
+    const checkEmail = (input) => {
+        setEmail(input)
+        setValidEmail(input.endsWith("@umass.edu"))
+    }
+
+    //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = () => {
-        let jsonData = {}
-        jsonData.email = email
-        //jsonData.password = password
-        console.log(JSON.stringify(jsonData))
-        /*
-        fetch('http://------------:8080/', {  // Enter correct address here
+        const emailJson = { email }
+
+        const response = fetch('http://localhost:3000/users/login', {  
             method: 'POST',
             mode: 'cors',
-            body: JSON.stringify(jsonData)
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(emailJson)
         })
-        */
+        response.then((res) => res.json())
+            .then((data) => console.log(data))
     }
-    /* Can be removed if password is not used
-    const checkPassword = (event) => {
-        let tempPassword = event.target.value
-        let correctLength = tempPassword.length >= 8 && tempPassword.length <= 25;
-        let hasUppercase = /[A-Z]/.test(tempPassword);
-        let hasNumber = /\d/.test(tempPassword);
-        setPassword(tempPassword);
-        setValidPassword(correctLength && hasNumber && hasUppercase)
-        setPasswordError(!(correctLength && hasNumber && hasUppercase))
-    }
-    */
-    Aos.init({ duration: 1800, offset: 0});
+
+
+    Aos.init({ duration: 1800, offset: 0 });
     return (
         <Box
             display="flex"
@@ -77,36 +72,17 @@ function LoginPage() {
                         id="email"
                         label="Email"
                         variant="outlined"
-                        onChange={(event) => { setEmail(event.target.value) }}
+                        onChange={(event) => { checkEmail(event.target.value) }}
                         onKeyDown={setEmail}
                         InputLabelProps={{
                             style: { color: '#B77BF3' },
                         }}
                     />
-
-                    {/* This can be removed if password is not used
-                    <TextField error={passwordError}
-                        id="password"
-                        label="Password"
-                        variant="outlined"
-                        type="password"
-                        helperText={!passwordError ? "" : "Invalid password"}
-                        onChange={checkPassword}
-                        InputLabelProps={{
-                            style: { color: '#B77BF3' },
-                        }}
-                    /> 
-                    <Stack maxWidth={300}>
-                        <Typography style={{ fontSize: '10px' }}>Password must be between 8-25 characters</Typography>
-                        <Typography style={{ fontSize: '10px' }}>Password must have 1 capital letter</Typography>
-                        <Typography style={{ fontSize: '10px' }}>Password must have 1 number</Typography>
-                    </Stack>
-                    */}
                     <Button
                         variant="contained"
                         onClick={handleClick}
-                        /*disabled={!validPassword}*/
                         color="secondary"
+                        disabled={!validEmail}
                     >
                         Login
                     </Button>
@@ -114,6 +90,7 @@ function LoginPage() {
                     <Button
                         variant="contained"
                         color="secondary"
+                        href="/signup"
                     >Register</Button>
                 </Stack>
             </Stack>

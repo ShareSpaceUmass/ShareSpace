@@ -1,13 +1,13 @@
 import React from 'react';
 
-function Pin({ pinSize, imgSrc, size }) {
+function Pin({imgSrc, name, age, year, major}) {
     return (
-        <div className={`pin ${pinSize} items-center justify-center hover:bg-[#f2bbfa]`}>
-            <img className="mainPic" src={imgSrc} alt="" />
-            <h3 className='h3 font-ubuntu lg:max-w-[20px] font-thin'>Name</h3>
-            <h3 className='h3 font-ubuntu lg:max-w-[20px] font-thin'>Age</h3>
-            <h3 className='h3 font-ubuntu lg:max-w-[20px] font-thin'>Year</h3>
-            <h3 className='h3 font-ubuntu lg:max-w-[20px] font-thin'>Major</h3>
+        <div className={`pin items-center justify-center`}>
+            <img className="mainPic rounded-xl" src={imgSrc} alt="" />
+            <h3 className='h3 font-ubuntu text-sm font-semibold hover:text-[#4f4f51]'>Name: {name}</h3>
+            <h3 className='h3 font-ubuntu text-sm font-semibold hover:text-[#4f4f51]'>Age: {age}</h3>
+            <h3 className='h3 font-ubuntu text-sm font-semibold hover:text-[#4f4f51]'>Year: {year}</h3>
+            <h3 className='h3 font-ubuntu text-sm font-semibold hover:text-[#4f4f51]'>Major: {major}</h3>
         </div>
     );
 }
