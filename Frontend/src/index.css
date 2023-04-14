@@ -52,4 +52,20 @@
     @apply text-lg text-secondary font-secondary font-medium leading-relaxed;
   }
 
+  .small {
+    @apply h-[80%];
+  }
+
+  .medium {
+    @apply h-[85%];
+  }
+
+  .large {
+    @apply h-[90%];
+  }
+
+  .x-large {
+    @apply h-[95%];
+  }
+
 }

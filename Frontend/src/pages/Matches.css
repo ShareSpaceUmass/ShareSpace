@@ -1,0 +1,13 @@
+.pin{
+  border-radius: 16px;
+  background-color: rgb(245, 236, 245);
+  margin: 5px;
+  position:relative;
+  overflow:hidden;
+}
+
+
+.pin .mainPic{
+  width:100%;
+  object-fit: contain;
+}
