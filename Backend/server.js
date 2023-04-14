@@ -13,10 +13,11 @@ app.use(cors());
 
 // Connect
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
+  host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
+  user: 'admin',
   password: '',
   database: 'userDatabase'
+  // database: 'giraffe'
 });
 
 

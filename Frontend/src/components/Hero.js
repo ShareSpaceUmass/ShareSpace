@@ -2,10 +2,14 @@ import React from 'react';
 import { HeroData } from '../data';
 import { Link } from "react-router-dom";
 import Header from '../components/Header';
+import Lottie from "lottie-react";
+import landingAnim from "../assets/landing-anim.json";
 
 const Hero = () => {
+    
     const { title, subtitle, btnText, img } = HeroData
     return (
+        
         <section className='lg:h-screen w-screen overflow-x-hidden'>
             <Header />
             <div className='container py-8 mx-auto overflow-hidden h-[80%] relative'>
@@ -20,9 +24,11 @@ const Hero = () => {
                         </p>
                     </div>
                     <div className='xl:absolute xl:-right-12 top-6' data-aos='fade-up' data-aos-delay='700'>
-                        {/* Image */}
-                        <img src={img} alt="image" className="xl:w-[680px]" />
+                        {/* Animation */}
+                        <div> <Lottie animationData={landingAnim} loop={true} /></div>
                     </div>
+                    
+                    
                 </div>
             </div>
         </section>
