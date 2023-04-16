@@ -13,11 +13,13 @@ app.use(cors());
 
 // Connect
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'april2002',
-  database: 'giraffe'
+  host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
+  user: 'admin',
+  password: '',
+  database: 'userDatabase'
+  // database: 'giraffe'
 });
+
 
 db.connect((err) => {
   if (err) {
@@ -25,10 +27,10 @@ db.connect((err) => {
   }
   console.log('Connected to the MySQL server.');
 });
-
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
+
 
 // All user routes contained in /routes/userRoutes
 app.use('/users', require('./routes/userRoutes'))

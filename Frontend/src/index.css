@@ -29,11 +29,11 @@
   }
 
   .btn-secondary {
-    @apply bg-accent-secondary hover:bg-accent-secondary_hover;
+    @apply bg-[#0a050db4] hover:bg-[#2a0b42] px-4 py-2 rounded-full text-[#f7eafe] shadow-2xl;
   }
 
   .btn-quaternary {
-    @apply bg-white text-base font-bold text-primary drop-shadow-primary hover:bg-accent-primary_hover;
+    @apply bg-[#6551754f] text-base font-bold text-primary hover:bg-[#d1c2d5];
   }
 
   .h1 {
@@ -50,6 +50,22 @@
 
   .lead {
     @apply text-lg text-secondary font-secondary font-medium leading-relaxed;
+  }
+
+  .small {
+    @apply h-[80%];
+  }
+
+  .medium {
+    @apply h-[85%];
+  }
+
+  .large {
+    @apply h-[90%];
+  }
+
+  .x-large {
+    @apply h-[95%];
   }
 
 }

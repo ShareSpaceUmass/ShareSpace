@@ -12,6 +12,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button';
+import Lottie from "lottie-react";
+import preferencesAnim from "../assets/preferences-anim.json";
 
 
 const basicPreferences = [
@@ -143,6 +145,7 @@ function PreferencePage() {
             minHeight="100vh"
             padding="100px"
         >
+            <div > <Lottie animationData={preferencesAnim} loop={true} /></div>
             <Stack>
                 <Typography variant="h2">Preference Selection</Typography>
                 <Stack
