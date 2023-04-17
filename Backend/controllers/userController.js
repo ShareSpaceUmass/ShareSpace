@@ -1,18 +1,28 @@
 const jwt = require("jsonwebtoken")
-const db = require('../server')
+const { Users } = require('../models')
 const dotenv = require('dotenv').config();
-
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
 
 
 // @desc   Register a new user
 // @route  POST /users
 // @access Public
-const registerUser = (req,res) => {
-  const fName = req.body.fName;
-  const lName = req.body.lName;
-  const email = req.body.email;
-  const gender = req.body.gender;
+const registerUser = async (req,res) => {
+  try {
+      const user = {
+        email: req.body.email,
+        firstName: req.body.fName,
+        lastName: req.body.lName,
+        gender: req.body.gender
+      };
+    
+      await Users.create(user);
+      res.status(200).json({message:"User registered succesfully"});
+      
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({message: "An error occurred while registering the user."});
+  }
 
   db.query(
     "INSERT INTO users (email, fName, lName, gender) VALUES (?, ?, ?, ?)", [email, fName, lName, gender], 
@@ -49,7 +59,7 @@ const loginUser = async (req, res) => {
 // @desc   Get user
 // @route  GET /getUser/:userId
 // @access Private
-const getUser = (req,res) => {
+const getUser = async (req,res) => {
     db.query('SELECT * FROM users WHERE id = ?', [req.params.userId], (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
@@ -60,7 +70,7 @@ const getUser = (req,res) => {
 // @desc   Get all users
 // @route  GET /getAllUsers
 // @access Private
-const getAllUsers = (req, res) => {
+const getAllUsers = async (req, res) => {
     let sql = 'SELECT * FROM users';
     db.query(sql, (err, result) => {
       if(err) return console.error('error: ' + err.message);
@@ -72,7 +82,7 @@ const getAllUsers = (req, res) => {
 // @desc   Update user data
 // @route  GET /updateUser/:userId/:field/:value
 // @access Private
-const updateUserData = (req, res) => {
+const updateUserData = async (req, res) => {
     let value = req.params.value;
     let userId = req.params.userId;
     let field = req.params.field;

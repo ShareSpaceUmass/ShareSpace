@@ -6,31 +6,37 @@ const { getUser } = require("./controllers/userController");
 const dotenv = require('dotenv').config();
 const app = express();
 const port = '3000';
+const db = require('./models');
 
 app.use(express.json());
 app.use(cors());
 
 
 // Connect
-const db = mysql.createConnection({
-  host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
-  user: 'admin',
-  password: '',
-  database: 'userDatabase'
-  // database: 'giraffe'
-});
+// const db = mysql.createConnection({
+//   host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
+//   user: 'admin',
+//   password: '3c84xGsI*288',
+//   database: 'userDatabase'
+//   // database: 'giraffe'
+// });
 
 
-db.connect((err) => {
-  if (err) {
-    return console.error('error: ' + err.message);
-  }
-  console.log('Connected to the MySQL server.');
-});
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
-});
+// db.connect((err) => {
+//   if (err) {
+//     return console.error('error: ' + err.message);
+//   }
+//   console.log('Connected to the MySQL server.');
+// });
+// app.listen(port, () => {
+//     console.log(`Example app listening on port ${port}`);
+// });
 
+db.sequelize.sync({alter: true}).then(() => {
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
+  })
+})
 
 // All user routes contained in /routes/userRoutes
 app.use('/users', require('./routes/userRoutes'))

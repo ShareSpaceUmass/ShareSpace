@@ -38,7 +38,7 @@ function findMatchIndex(matchVal, matches, low, high){
         return findMatchIndex(matchVal, matches, idx+1, high);
     }
     // Match values are equal
-    else{
+    else {
         return idx;
     }
 }
