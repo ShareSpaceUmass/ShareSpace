@@ -3,22 +3,29 @@ const { Users } = require('../models')
 const { Messages } = require('../models')
 const dotenv = require('dotenv').config();
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
+const mysql = require("mysql2");
 
+const db = mysql.createConnection({
+  host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
+  user: 'admin',
+  password: '',
+  database: 'userDatabase'
+});
 
 // @desc   Register a new user
 // @route  POST /users
 // @access Public
 const registerUser = async (req,res) => {
   try {
-      const user = {
-        email: req.body.email,
-        firstName: req.body.fName,
-        lastName: req.body.lName,
-        gender: req.body.gender
-      };
-    
-      await Users.create(user);
-      res.status(200).json({message:"User registered succesfully"});
+    const user = {
+      email: req.body.email,
+      fName: req.body.fName,
+      lName: req.body.lName,
+      gender: req.body.gender
+    };
+  
+    await Users.create(user);
+    res.status(200).json({message:"User registered succesfully"});
       
   } catch(err) {
     console.error(err);
@@ -58,6 +65,7 @@ const getUser = async (req,res) => {
         id: req.params.userId
       }
     });
+    res.send(user);
     console.log("User fetched: ", JSON.stringify(user, null));
   } 
   catch(err) {
@@ -73,6 +81,7 @@ const getAllUsers = async (req, res) => {
   try {
     const users = await Users.findAll();
     console.log("All users:", JSON.stringify(users, null, 2));
+    res.send(users)
   } catch(err) {
     console.error(err);
     res.status(500).json({message: "An error occurred while fetching all users."});
@@ -101,8 +110,8 @@ const updateUserData = async (req, res) => {
   //   console.error(err);
   //   res.status(500).json({message: "An error occurred while updating this field."});
   // }
-
-  db.query('UPDATE users SET ? = ? WHERE id = ?', [field, value, userId], (err, result) => {
+  console.log(value, userId, field);
+  db.query('UPDATE Users SET ? = ? WHERE id = ?', [field, value, userId], (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
     res.send("user updated!");
