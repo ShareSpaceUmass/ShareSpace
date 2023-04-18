@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "admin",
-    "password": "3c84xGsI*288",
+    "password": "",
     "database": "userDatabase",
     "host": "sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com",
     "dialect": "mysql"

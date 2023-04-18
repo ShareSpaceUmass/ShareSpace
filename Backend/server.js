@@ -16,7 +16,7 @@ app.use(cors());
 // const db = mysql.createConnection({
 //   host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
 //   user: 'admin',
-//   password: '3c84xGsI*288',
+//   password: '',
 //   database: 'userDatabase'
 //   // database: 'giraffe'
 // });
