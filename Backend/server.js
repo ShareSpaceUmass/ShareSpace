@@ -18,7 +18,6 @@ app.use(cors());
 //   user: 'admin',
 //   password: '',
 //   database: 'userDatabase'
-//   // database: 'giraffe'
 // });
 
 

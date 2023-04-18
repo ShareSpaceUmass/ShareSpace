@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
         },
         bio: {
-            type: DataTypes.CHAR(20),
+            type: DataTypes.CHAR(255),
         },
 
     });
