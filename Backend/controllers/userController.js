@@ -55,6 +55,21 @@ const loginUser = async (req, res) => {
   res.json("Email not registered")
 }
 
+// @desc   Delete an existing user
+// @route  POST /users/deleteUser/:userId
+// @access Public
+const deleteUser = async (req,res) => {
+  try {
+    const userId = req.params.userId;
+    const deleted = await Users.destroy({where: {id: userId}});
+    console.log(`Deleted user: ${deleted}`);
+    res.status(200).json({message:"User deleted succesfully"});
+  } catch(err) {
+    console.error(err);
+    res.status(500).json({message: "An error occurred while deleting the user."});
+  }
+}
+
 // @desc   Get user
 // @route  GET /getUser/:userId
 // @access Private
@@ -120,6 +135,7 @@ const updateUserData = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    deleteUser,
     getUser,
     updateUserData,
     getAllUsers,
