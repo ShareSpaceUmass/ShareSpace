@@ -110,8 +110,7 @@ const updateUserData = async (req, res) => {
   //   console.error(err);
   //   res.status(500).json({message: "An error occurred while updating this field."});
   // }
-  console.log(value, userId, field);
-  db.query('UPDATE Users SET ? = ? WHERE id = ?', [field, value, userId], (err, result) => {
+  db.query(`UPDATE Users SET ${field} = ? WHERE id = ?`, [value, userId], (err, result) => {
     if(err) return console.error('error: ' + err.message);
     console.log(result);
     res.send("user updated!");
