@@ -3,15 +3,6 @@ const { Users } = require('../models')
 const { Messages } = require('../models')
 const dotenv = require('dotenv').config();
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
-const mysql = require("mysql2");
-
-const db = mysql.createConnection({
-  host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
-  user: 'admin',
-  password: '',
-  database: 'userDatabase'
-});
-
 // @desc   Register a new user
 // @route  POST /users
 // @access Public
@@ -104,32 +95,31 @@ const getAllUsers = async (req, res) => {
 };
 
 // @desc   Update user data
-// @route  GET /updateUser/:userId/:field/:value
+// @route  POST /updateUser/:userId
 // @access Private
 const updateUserData = async (req, res) => {
-  let value = req.params.value;
   let userId = req.params.userId;
-  let field = req.params.field;
-  // try{
-  //   await Users.update(
-  //     {
-  //       field: value
-  //     },
-  //     {
-  //       id: userId
-  //     }
-  //   );
-  //   console.log("Field successfully updated.");
-  // }
-  // catch(err){
-  //   console.error(err);
-  //   res.status(500).json({message: "An error occurred while updating this field."});
-  // }
-  db.query(`UPDATE Users SET ${field} = ? WHERE id = ?`, [value, userId], (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("user updated!");
-  });
+  const updatedUser = {
+    email: req.body.email,
+    fName: req.body.fName,
+    lName: req.body.lName,
+    gender: req.body.gender
+  };
+
+  try{
+    await Users.update(
+      updatedUser,
+      {
+        where: {id: userId}
+      }
+    );
+    res.send("Field updated");
+    console.log("Field successfully updated.");
+  }
+  catch(err){
+    console.error(err);
+    res.status(500).json({message: "An error occurred while updating this field."});
+  }
 }
 
 module.exports = {

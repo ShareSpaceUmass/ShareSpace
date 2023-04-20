@@ -7,6 +7,6 @@ router.post('/login', loginUser);
 router.post('/deleteUser/:userId', deleteUser);
 router.get('/getUser/:userId', getUser);
 router.get('/getAllUsers', getAllUsers)
-router.get('/updateUser/:userId/:field/:value', updateUserData)
+router.post('/updateUser/:userId', updateUserData)
 
 module.exports = router;
