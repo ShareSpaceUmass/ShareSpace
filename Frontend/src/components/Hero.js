@@ -18,7 +18,9 @@ const Hero = () => {
                         {/* Text */}
                         <h1 className="xl:h1 sm:h2 md:h2 lg:h2 xl:max-w-[600px] mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='400'>{title}</h1>
                         <p className="lead xl:max-w-[400px] lg:mb-8 font-ubuntu" data-aos='fade-down' data-aos-delay='500'>{subtitle}</p>
-                        <button className="btn btn-primary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>{btnText}</button>
+                        <Link to="/signup">
+                        <button className="btn btn-primary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' href="/signup">{btnText}</button>
+                        </Link>
                         <p className="font-ubuntu" data-aos='fade-up' data-aos-delay='600'>Already have an Account?
                             <Link to="/login"> Login</Link>
                         </p>

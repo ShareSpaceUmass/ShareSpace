@@ -14,6 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Button from '@mui/material/Button';
 import Lottie from "lottie-react";
 import preferencesAnim from "../assets/preferences-anim.json";
+import Aos from 'aos';
 
 
 const basicPreferences = [
@@ -49,10 +50,16 @@ const basicPreferences = [
     },
     {
         key: "guests",
-        name: "How often can your roommate have guests over?",
+        name: "How often will you have guests over?",
         values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
         chosen: ""
     },
+    {
+        key: "roommateGuests",
+        name: "How often can your roommate have guests over?",
+        values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
+        chosen: ""
+    }
 ]
 
 const interests = [
@@ -60,13 +67,15 @@ const interests = [
         key: "sports",
         name: "What sports do you like?",
         values: ["Basketball", "Football", "Soccer", "Rugby", "Hockey", "Baseball", "Cross Country", "Track/Field", "Lacrosse",
-        "Field Hockey", "Swimming", "Golf", "Ultimate Frisbee", "Climbing", "Cheer", "Gymnastics"],
+        "Field Hockey", "Swimming", "Golf", "Ultimate Frisbee", "Climbing", "Cheer", "Gymnastics", "Snowboarding", "Skiing",
+        "Surfing", "Dance", "Frisbee Golf"],
         chosen: []
     },
     {
         key: "hobbies",
         name: "What hobbies do you like?",
-        values: ["Music", "Reading", "Drawing", "Lifting", "Gardening", "Knitting", "Pottery", "Biking", "Hiking"],
+        values: ["Music", "Reading", "Drawing", "Lifting", "Gardening", "Knitting", "Pottery", "Biking", "Hiking", "Video Games",
+        "Photography", "Cooking", "Yoga", "Writing", "Calligraphy"],
         chosen: []
     }
 ]
@@ -102,7 +111,7 @@ const preferenceList = basicPreferences.map((preference) => {
 }
 )
 
-const interestList = interests.map((interest) => { 
+const interestList = interests.map((interest) => {
     return (
         <Box 
         key={interest.key}
@@ -138,14 +147,22 @@ const interestList = interests.map((interest) => {
 )
 
 function PreferencePage() {
+    Aos.init({ duration: 1800, offset: 0 });
     return (
         <Box
             display="flex"
             justifyContent="center"
             minHeight="100vh"
             padding="100px"
-        >
-            <div > <Lottie animationData={preferencesAnim} loop={true} /></div>
+            data-aos="fade-up"
+        >   
+            <Box
+            sx={{
+            maxWidth: {md: 650}
+            }}
+            >
+            <div> <Lottie animationData={preferencesAnim} loop={true} /></div>
+            </Box>
             <Stack>
                 <Typography variant="h2">Preference Selection</Typography>
                 <Stack
@@ -153,7 +170,11 @@ function PreferencePage() {
                     marginTop: 2.5
                 }}
                 >
-                    <Accordion>
+                    <Accordion
+                    sx={{
+                        backgroundColor: '#f6e9ff'
+                    }}
+                    >
                         <AccordionSummary
                         sx={{
                             backgroundColor: '#B77BF3'
@@ -173,7 +194,11 @@ function PreferencePage() {
                     marginTop: 2.5
                 }}
                 >
-                    <Accordion>
+                    <Accordion
+                    sx={{
+                        backgroundColor: '#f6e9ff'
+                    }}
+                    >
                         <AccordionSummary
                         sx={{
                             backgroundColor: '#B77BF3'
