@@ -151,15 +151,7 @@ const updateUserData = async (req, res) => {
 
     await s3.send(command);
 
-    updatedUser = {
-      email: req.body.email,
-      fName: req.body.fName,
-      lName: req.body.lName,
-      gender: req.body.gender,
-      age: req.body.age,
-      bio: req.body.bio,
-      profilePic: imageName
-    };
+    updatedUser.profilePic = imageName;
   }
 
 
