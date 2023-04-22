@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
         bio: {
             type: DataTypes.CHAR(255),
         },
+        profilePic:{
+            type: DataTypes.CHAR(255),
+        },
+        imageUrl:{
+            type: DataTypes.CHAR(255),
+        }
 
     });
 
