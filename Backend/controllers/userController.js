@@ -4,10 +4,13 @@ const { Messages } = require('../models')
 const dotenv = require('dotenv').config();
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
 const crypto = require('crypto')
+const sharp = require('sharp')
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
+//resize image
+const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
@@ -143,7 +146,7 @@ const updateUserData = async (req, res) => {
     const params = {
       Bucket: bucketName,
       Key: imageName,
-      Body: req.file.buffer,
+      Body: buffer,
       ContentType: req.file.mimetype
     }
 
