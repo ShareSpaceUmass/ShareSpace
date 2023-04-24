@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser, deleteUser, getUser, updateUserData, getAllUsers } = require('../controllers/userController')
 
-import multer from 'multer'
+const multer = require('multer'); 
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
