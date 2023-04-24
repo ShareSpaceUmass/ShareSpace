@@ -1,6 +1,6 @@
 import { Grid, Container, Box, Stack, IconButton, TextField, Typography } from "@mui/material"
 import SendIcon from '@mui/icons-material/Send';
-import Header from "../components/Header";
+import Nav from "../components/Nav";
 import ChatWidget from "../components/chatbox-components/ChatWidget";
 import { InChat, OutChat } from "../components/chatbox-components/ChatBoxes";
 import Aos from "aos";
@@ -10,7 +10,7 @@ function ChatPage() {
     Aos.init({ duration: 1000, offset: 0 });
     return (
         <Stack>
-            <Header />
+            <Nav />
             <Box
                 minHeight="80vh"
                 display="flex"
