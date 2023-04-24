@@ -4,7 +4,6 @@ const { registerUser, loginUser, deleteUser, getUser, updateUserData, getAllUser
 
 import multer from 'multer'
 
-
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 

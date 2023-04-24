@@ -8,6 +8,11 @@ const sharp = require('sharp')
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
+import multer from 'multer'
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 //resize image
 const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
@@ -98,7 +103,6 @@ const getUser = async (req,res) => {
       Bucket: bucketName,
       Key: user.imageName
     }
-    const client = new S3Client(clientParams);
     const command = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
     user.imageUrl = url;
