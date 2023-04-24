@@ -2,4 +2,4 @@
 /Frontend/node_modules
 /node_modules
 /Backend/.env
-/Backend/config/config.json
+/Backend/config.json
