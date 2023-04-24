@@ -2,7 +2,6 @@ import * as React from 'react';
 import { InputLabel, MenuItem, FormControl, Box, Stack, Typography, Button, TextField, Grid, Select } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png';
 import { useState } from 'react';
-import getEmail from '../components/register-login/getEmail';
 import Aos from 'aos';
 
 function SignupPage() {
@@ -11,11 +10,24 @@ function SignupPage() {
   const [email, setEmail] = useState('')
   const [gender, setGender] = useState('')
   const [emailError, setEmailError] = useState(false)
+  const [emailErrorType, setEmailErrorType] = useState("")
 
-  const checkEmail = (input) => {
+  const checkEmail = async(input) => {
     setEmail(input)
-    console.log(getEmail())
-    setEmailError(!input.endsWith("@umass.edu"))
+    const response = await fetch('http://localhost:3000/users/getAllUsers/')
+    const users = await response.json()
+    if (users.some(e=>e.email === input)) {
+      setEmailError(true)
+      setEmailErrorType("This email is already in use")
+    }
+    else if(!input.endsWith("@umass.edu")){
+      setEmailError(true)
+      setEmailErrorType("Email must end in @umass.edu")
+    }
+    else{
+      setEmailError(false)
+    }
+
   }
 
   const missingInfo = () => {
@@ -120,7 +132,7 @@ function SignupPage() {
                   checkEmail(event.target.value)
                 }
               }
-              helperText={!emailError ? "" : "Email must end in @umass.edu"}
+              helperText={!emailError ? "" : emailErrorType}
               InputLabelProps={{
                 style: { color: '#B77BF3' },
               }}
