@@ -29,7 +29,7 @@ function LoginPage() {
     const checkEmail = (input) => {
         setEmail(input)
         setUsedEmail(false)
-        setValidEmail(input.endsWith("@umass.edu"))
+        setValidEmail(!input.endsWith("@umass.edu"))
     }
 
     //Click handler for login button. Sends email as json object to the backend using FETCH api
@@ -89,20 +89,22 @@ function LoginPage() {
                 >
                     <Typography sx={{ typography: { md: 'h3', sm: 'body1' } }}>Welcome Back!</Typography>
                     <TextField
+                        error = {validEmail}
                         id="email"
                         label="Email"
                         variant="outlined"
                         onChange={(event) => { checkEmail(event.target.value) }}
-                        onKeyDown={setEmail}
+                        helperText={!validEmail ? "" : "Email must end in @umass.edu"}
                         InputLabelProps={{
                             style: { color: '#B77BF3' },
                         }}
+                        onKeyDown={setEmail}
                     />
                     <Button
                         variant="contained"
                         onClick={handleClick}
                         color="secondary"
-                    //disabled={!validEmail}
+                        disabled={validEmail}
                     >
                         Login
                     </Button>
