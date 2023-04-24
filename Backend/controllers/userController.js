@@ -3,6 +3,28 @@ const { Users } = require('../models')
 const { Messages } = require('../models')
 const dotenv = require('dotenv').config();
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
+const crypto = require('crypto')
+const sharp = require('sharp')
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+
+
+const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
+
+const bucketName = process.env.BUCKET_NAME;
+const bucketRegion = process.env.BUCKET_REGION;
+const accessKey = process.env.ACCESS_KEY;
+const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey
+  },
+  region: bucketRegion
+})
+
+
 // @desc   Register a new user
 // @route  POST /users
 // @access Public
@@ -65,12 +87,23 @@ const deleteUser = async (req,res) => {
 // @route  GET /getUser/:userId
 // @access Private
 const getUser = async (req,res) => {
+
   try {
     const user = await Users.findAll({
       where: {
         id: req.params.userId
       }
     });
+    //resize image
+    const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: user.imageName
+    }
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+    user.imageUrl = url;
+  
     res.send(user);
     console.log("User fetched: ", JSON.stringify(user, null));
   } 
@@ -99,12 +132,32 @@ const getAllUsers = async (req, res) => {
 // @access Private
 const updateUserData = async (req, res) => {
   let userId = req.params.userId;
+  let changedPfp = req.body.changedPfp;
   const updatedUser = {
     email: req.body.email,
     fName: req.body.fName,
     lName: req.body.lName,
-    gender: req.body.gender
+    gender: req.body.gender,
+    age: req.body.age,
+    bio: req.body.bio
   };
+
+  if(changedPfp){
+    const imageName = randomImageName();
+    const params = {
+      Bucket: bucketName,
+      Key: imageName,
+      Body: buffer,
+      ContentType: req.file.mimetype
+    }
+
+    const command = new PutObjectCommand(params);
+
+    await s3.send(command);
+
+    updatedUser.profilePic = imageName;
+  }
+
 
   try{
     await Users.update(
@@ -128,5 +181,5 @@ module.exports = {
     deleteUser,
     getUser,
     updateUserData,
-    getAllUsers,
+    getAllUsers
 }
