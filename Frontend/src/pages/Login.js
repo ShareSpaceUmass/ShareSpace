@@ -1,39 +1,59 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
 import Aos from 'aos';
 
-
+function emailError(error) {
+    if (error) {
+        return (
+            <Alert severity="error">
+                <AlertTitle>Error</AlertTitle>
+                This email is not registered — <strong>Double check your email!</strong>
+            </Alert>
+        )
+    }
+    else {
+        return (
+            <Box></Box>
+        )
+    }
+}
 
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [validEmail, setValidEmail] = useState(false)
+    const [usedEmail, setUsedEmail] = useState(false)
 
     //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
         setEmail(input)
+        setUsedEmail(false)
         setValidEmail(input.endsWith("@umass.edu"))
     }
 
     //Click handler for login button. Sends email as json object to the backend using FETCH api
-    const handleClick = () => {
-        const emailJson = { email }
+    const handleClick = async () => {
+        const userData = await fetch('http://localhost:3000/users/getAllUsers/')
+        const users = await userData.json()
+        console.log(users.some(e => e.email === email))
+        if (!users.some(e => e.email === email)) {
+            setUsedEmail(true)
+        }
+        else {
+            const emailJson = { email }
 
-        const response = fetch('http://localhost:3000/users/login', {  
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(emailJson)
-        })
-        response.then((res) => res.json())
-            .then((data) => console.log(data))
+            const response = fetch('http://localhost:3000/users/login', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(emailJson)
+            })
+            response.then((res) => res.json())
+                .then((data) => console.log(data))
+        }
     }
 
 
@@ -82,10 +102,11 @@ function LoginPage() {
                         variant="contained"
                         onClick={handleClick}
                         color="secondary"
-                        disabled={!validEmail}
+                    //disabled={!validEmail}
                     >
                         Login
                     </Button>
+                    {emailError(usedEmail)}
                     <Typography style={{ textAlign: 'center' }}>Don't have an account?</Typography>
                     <Button
                         variant="contained"
