@@ -6,21 +6,23 @@ const Nav = () => {
     return (
         <header class="bg-gradient-to-b from-[#ffffff] to-[#fbe2ff61]">
             <nav className='py-4 px-12 flex justify-between'>
-                <Link to='/'> 
+                <Link to='/'>
                     <div>
-                        <img className="w-28" src={logo} alt="ShareSpace logo"/>
+                        <img className="w-28" src={logo} alt="ShareSpace logo" />
                     </div>
                 </Link>
-                <div>
-                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>Matches</button>
+                <div class="flex">
+                    <div>
+                        <button className="btn-secondary xl:mb-6 font-ubuntu" style={{margin:"5px"}} data-aos='fade-down' data-aos-delay='600'>Matches</button>
+                    </div>
+                    <div>
+                        <button className="btn-secondary xl:mb-6 font-ubuntu" style={{margin:"5px"}} data-aos='fade-down' data-aos-delay='600'>Profile</button>
+                    </div>
+                    <div>
+                        <button className="btn-secondary xl:mb-6 font-ubuntu" style={{margin:"5px"}} data-aos='fade-down' data-aos-delay='600'>Chat</button>
+                    </div>
                 </div>
-                <div>
-                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>Profile</button>
-                </div>
-                <div>
-                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>Chat</button>
-                </div>
-            </nav>          
+            </nav>
         </header>
     )
 }

@@ -31,20 +31,6 @@ function ChatPage() {
                                     overflow: 'auto'
                                 }}
                             >
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "0"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
-                                <ChatWidget image="https://www.ischool.berkeley.edu/sites/default/files/styles/profile_photo/public/profile_pictures/minea.jpg?itok=X4-9bYu2&c=342e574f8f7bcede7cf1baf1c545c123" name="Marius" noti = "2"/>
                             </Stack>
                         </Grid>
                         <Grid md={9} data-aos="fade-down">
@@ -66,9 +52,6 @@ function ChatPage() {
                                         overflow: 'auto'
                                     }}
                                 >
-                                    <InChat message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae volutpat metus, cursus aliquet ligula. Pellentesque et metus nunc. In ut libero id sem ultricies tempor id a leo. Phasellus dapibus tellus at nibh fringilla finibus. Quisque dictum congue ligula nec ornare. Aenean tincidunt eros id aliquam fringilla. In id pulvinar erat, eget efficitur odio. Aliquam erat volutpat. Morbi non enim condimentum, laoreet ligula et, faucibus quam. Aenean bibendum ex sapien, eu gravida tellus aliquet non. Phasellus sit amet condimentum turpis. Morbi cursus, turpis at imperdiet tincidunt, lacus massa imperdiet arcu, at mollis elit nisl vel justo. Suspendisse potenti."/>
-                                    <OutChat message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae volutpat metus, cursus aliquet ligula. Pellentesque et metus nunc. In ut libero id sem ultricies tempor id a leo. Phasellus dapibus tellus at nibh fringilla finibus. Quisque dictum congue ligula nec ornare. Aenean tincidunt eros id aliquam fringilla. In id pulvinar erat, eget efficitur odio. Aliquam erat volutpat. Morbi non enim condimentum, laoreet ligula et, faucibus quam. Aenean bibendum ex sapien, eu gravida tellus aliquet non. Phasellus sit amet condimentum turpis. Morbi cursus, turpis at imperdiet tincidunt, lacus massa imperdiet arcu, at mollis elit nisl vel justo. "></OutChat>
-                                    <InChat message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vitae volutpat metus, cursus aliquet ligula. Pellentesque et metus nunc. In ut libero id sem ultricies tempor id a leo. Phasellus dapibus tellus at nibh fringilla finibus. Quisque dictum congue ligula nec ornare. Aenean tincidunt eros id aliquam fringilla. In id pulvinar erat, eget efficitur odio. Aliquam erat volutpat. Morbi non enim condimentum, laoreet ligula et, faucibus quam. Aenean bibendum ex sapien, eu gravida tellus aliquet non. Phasellus sit amet condimentum turpis. Morbi cursus, turpis at imperdiet tincidunt, lacus massa imperdiet arcu, at mollis elit nisl vel justo. Suspendisse potenti."/>
                                 </Stack>
                                 <Grid container>
                                     <Grid md={11}>
