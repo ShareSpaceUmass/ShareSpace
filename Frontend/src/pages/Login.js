@@ -34,7 +34,7 @@ function LoginPage() {
 
     //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = async () => {
-        const userData = await fetch('http://localhost:3000/users/getAllUsers/')
+        const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
         const users = await userData.json()
         console.log(users.some(e => e.email === email))
         if (!users.some(e => e.email === email)) {
@@ -43,7 +43,7 @@ function LoginPage() {
         else {
             const emailJson = { email }
 
-            const response = fetch('http://localhost:3000/users/login', {
+            const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/login/", {
                 method: 'POST',
                 mode: 'cors',
                 headers: {
