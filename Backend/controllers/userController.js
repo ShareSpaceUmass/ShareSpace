@@ -134,6 +134,8 @@ const updateUserData = async (req, res) => {
 
   if(changedPfp){
     const imageName = randomImageName();
+    //resize image
+    const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
     const params = {
       Bucket: bucketName,
       Key: imageName,
@@ -144,9 +146,7 @@ const updateUserData = async (req, res) => {
     const postCommand = new PutObjectCommand(params);
     await s3.send(postCommand);
     updatedUser.profilePic = imageName;
-
-    //resize image
-    const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
+    
     const getObjectParams = {
       Bucket: bucketName,
       Key: imageName
