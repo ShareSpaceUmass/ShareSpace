@@ -199,7 +199,7 @@ function SignupPage() {
         >
           <Button
             variant="contained"
-            disabled={missingInfo() || emailError}
+            disabled={missingInfo() || validEmail}
             onClick={register}
             color="secondary"
             sx={{
