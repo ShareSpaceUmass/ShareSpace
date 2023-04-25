@@ -39,18 +39,24 @@ function SignupPage() {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
   }
 
-  const register = () => {
+  const register = async() => {
     const user = { fName, lName, email, gender }
-
-    const response = fetch('http://localhost:3000/users/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user)
-    })
-    response.then((res) => res.json())
-      .then((data) => console.log(data))
+    const userData = await fetch('http://localhost:3000/users/getAllUsers/')
+    const users = await userData.json()
+    if (users.some(e => e.email === email)) {
+      setUsedEmail(true)
+    }
+    else {
+      const response = fetch('http://localhost:3000/users/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      })
+      response.then((res) => res.json())
+        .then((data) => console.log(data))
+    }
   }
 
   Aos.init({ duration: 1800, offset: 0 });
@@ -196,6 +202,8 @@ function SignupPage() {
       >
         <Stack
           spacing={2}
+          justifyContent="center"
+          alignItems="center"
         >
           <Button
             variant="contained"
@@ -214,6 +222,7 @@ function SignupPage() {
             variant="contained"
             color="secondary"
             href="/login"
+            sx={{width:250}}
           >Login
           </Button>
         </Stack>
