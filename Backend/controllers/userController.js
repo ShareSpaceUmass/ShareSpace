@@ -8,7 +8,6 @@ const sharp = require('sharp')
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
 const bucketName = process.env.BUCKET_NAME;
