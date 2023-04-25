@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InputLabel, MenuItem, FormControl, Box, Stack, Typography, Button, TextField, Grid, Select } from '@mui/material';
+import { InputLabel, MenuItem, FormControl, Box, Stack, Typography, Button, TextField, Grid, Select, Alert, AlertTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png';
 import { useState } from 'react';
 import Aos from 'aos';
@@ -9,26 +9,31 @@ function SignupPage() {
   const [lName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [gender, setGender] = useState('')
-  const [emailError, setEmailError] = useState(false)
-  const [emailErrorType, setEmailErrorType] = useState("")
+  const [validEmail, setValidEmail] = useState(false)
+  const [usedEmail, setUsedEmail] = useState(false)
 
-  const checkEmail = async(input) => {
-    setEmail(input)
-    const response = await fetch('http://localhost:3000/users/getAllUsers/')
-    const users = await response.json()
-    if (users.some(e=>e.email === input)) {
-      setEmailError(true)
-      setEmailErrorType("This email is already in use")
+  function emailError(error) {
+    if (error) {
+      return (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          This email is already registered — <strong>Please try a new email or login!</strong>
+        </Alert>
+      )
     }
-    else if(!input.endsWith("@umass.edu")){
-      setEmailError(true)
-      setEmailErrorType("Email must end in @umass.edu")
+    else {
+      return (
+        <Box></Box>
+      )
     }
-    else{
-      setEmailError(false)
-    }
-
   }
+
+  const checkEmail = async (input) => {
+    setEmail(input)
+    setUsedEmail(false)
+    setValidEmail(!input.endsWith("@umass.edu"))
+  }
+
 
   const missingInfo = () => {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
@@ -123,7 +128,7 @@ function SignupPage() {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField error={emailError}
+            <TextField error={validEmail}
               id="email"
               label="Email"
               variant="outlined"
@@ -132,7 +137,7 @@ function SignupPage() {
                   checkEmail(event.target.value)
                 }
               }
-              helperText={!emailError ? "" : emailErrorType}
+              helperText={!validEmail ? "" : "Email must end in @umass.edu"}
               InputLabelProps={{
                 style: { color: '#B77BF3' },
               }}
@@ -203,6 +208,7 @@ function SignupPage() {
           >
             Register
           </Button>
+          {emailError(usedEmail)}
           <Typography style={{ textAlign: 'center' }}>Already have an account?</Typography>
           <Button
             variant="contained"
