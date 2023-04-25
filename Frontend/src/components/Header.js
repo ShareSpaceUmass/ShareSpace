@@ -12,7 +12,8 @@ const Header = () => {
                     </div>
                 </Link>
                 <div>
-                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600'>Register</button>
+                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' style={{margin:"5px"}}>Login</button>
+                    <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' style={{margin:"5px"}}>Register</button>
                 </div>
             </nav>          
         </header>
