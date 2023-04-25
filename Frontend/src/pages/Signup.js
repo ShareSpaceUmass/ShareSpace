@@ -41,13 +41,13 @@ function SignupPage() {
 
   const register = async() => {
     const user = { fName, lName, email, gender }
-    const userData = await fetch('http://localhost:3000/users/getAllUsers/')
+    const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
     const users = await userData.json()
     if (users.some(e => e.email === email)) {
       setUsedEmail(true)
     }
     else {
-      const response = fetch('http://localhost:3000/users/', {
+      const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
