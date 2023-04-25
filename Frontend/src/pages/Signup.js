@@ -39,10 +39,10 @@ function SignupPage() {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
   }
 
+
   const register = () => {
     const user = { fName, lName, email, gender }
-
-    const response = fetch('http://localhost:3000/users/', {
+    const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
