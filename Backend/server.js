@@ -10,6 +10,8 @@ const db = require('./models');
 
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({extended: false}));
+
 
 
 // Connect

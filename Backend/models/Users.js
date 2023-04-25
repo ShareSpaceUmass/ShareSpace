@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.CHAR(255),
         },
         imageUrl:{
-            type: DataTypes.CHAR(255),
+            type: DataTypes.TEXT,
         }
 
     });

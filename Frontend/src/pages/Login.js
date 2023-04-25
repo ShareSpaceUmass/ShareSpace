@@ -87,7 +87,6 @@ function LoginPage() {
                     maxWidth="30vw"
 
                 >
-                    <Typography sx={{ typography: { md: 'h3', sm: 'body1' } }}>Welcome Back!</Typography>
                     <TextField
                         error = {validEmail}
                         id="email"

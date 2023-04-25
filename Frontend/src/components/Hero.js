@@ -21,9 +21,6 @@ const Hero = () => {
                         <Link to="/signup">
                         <button className="btn btn-primary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' href="/signup">{btnText}</button>
                         </Link>
-                        <p className="font-ubuntu" data-aos='fade-up' data-aos-delay='600'>Already have an Account?
-                            <Link to="/login"> Login</Link>
-                        </p>
                     </div>
                     <div className='xl:absolute xl:-right-12 top-6' data-aos='fade-up' data-aos-delay='700'>
                         {/* Animation */}

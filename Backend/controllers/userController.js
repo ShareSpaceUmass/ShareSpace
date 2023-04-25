@@ -8,7 +8,6 @@ const sharp = require('sharp')
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
-
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
 const bucketName = process.env.BUCKET_NAME;
@@ -87,23 +86,13 @@ const deleteUser = async (req,res) => {
 // @route  GET /getUser/:userId
 // @access Private
 const getUser = async (req,res) => {
-
   try {
     const user = await Users.findAll({
       where: {
         id: req.params.userId
       }
     });
-    //resize image
-    const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
-    const getObjectParams = {
-      Bucket: bucketName,
-      Key: user.imageName
-    }
-    const command = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-    user.imageUrl = url;
-  
+
     res.send(user);
     console.log("User fetched: ", JSON.stringify(user, null));
   } 
@@ -133,6 +122,7 @@ const getAllUsers = async (req, res) => {
 const updateUserData = async (req, res) => {
   let userId = req.params.userId;
   let changedPfp = req.body.changedPfp;
+
   const updatedUser = {
     email: req.body.email,
     fName: req.body.fName,
@@ -144,6 +134,8 @@ const updateUserData = async (req, res) => {
 
   if(changedPfp){
     const imageName = randomImageName();
+    //resize image
+    const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
     const params = {
       Bucket: bucketName,
       Key: imageName,
@@ -151,13 +143,18 @@ const updateUserData = async (req, res) => {
       ContentType: req.file.mimetype
     }
 
-    const command = new PutObjectCommand(params);
-
-    await s3.send(command);
-
+    const postCommand = new PutObjectCommand(params);
+    await s3.send(postCommand);
     updatedUser.profilePic = imageName;
+    
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: imageName
+    }
+    const getCommand = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, getCommand);
+    updatedUser.imageUrl = url;
   }
-
 
   try{
     await Users.update(
