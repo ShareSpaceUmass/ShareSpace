@@ -1,10 +1,11 @@
-const jwt = require("jsonwebtoken")
-const { Users } = require('../models')
-const { Messages } = require('../models')
+const jwt = require("jsonwebtoken");
+const { Users } = require('../models');
+const { Messages } = require('../models');
 const dotenv = require('dotenv').config();
-const { sendMagicLinkEmail } = require('../middleware/sendLink')
-const crypto = require('crypto')
-const sharp = require('sharp')
+const { sendMagicLinkEmail } = require('../middleware/sendLink');
+const { emailCheck } = require('../middleware/emailCheck');
+const crypto = require('crypto');
+const sharp = require('sharp');
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
@@ -34,15 +35,19 @@ const registerUser = async (req,res) => {
       email: req.body.email,
       fName: req.body.fName,
       lName: req.body.lName,
-      gender: req.body.gender
+      gender: req.body.gender,
     };
-  
+
+    if(!emailCheck(user.email)) {
+      throw new Error("Invalid email domain, please use a UMass email")
+    }
+
     await Users.create(user);
-    res.status(200).json({message:"User registered succesfully"});
+    res.status(200).json({message:"User registered succesfully!"});
       
   } catch(err) {
     console.error(err);
-    res.status(500).json({message: "An error occurred while registering the user."});
+    res.status(500).send(err.message);
   }
 }
 
@@ -94,6 +99,7 @@ const getUser = async (req,res) => {
         id: req.params.userId
       }
     });
+
     //resize image
     const buffer = await sharp(req.file.buffer).resize({height: 1920, width: 1080, fit: "contain"}).toBuffer()
     const getObjectParams = {
