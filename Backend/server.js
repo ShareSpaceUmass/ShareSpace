@@ -13,7 +13,6 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 
 
-
 // Connect
 // const db = mysql.createConnection({
 //   host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
@@ -33,6 +32,16 @@ app.use(express.urlencoded({extended: false}));
 //     console.log(`Example app listening on port ${port}`);
 // });
 
+// Create database
+// app.post("/createDatabase", (req, res) => {
+//   let sql = 'CREATE DATABASE userDatabase';
+//   db.query(sql, (err, result) => {
+//     if(err) return console.error('error: ' + err.message);
+//     console.log(result);
+//     res.send("Database created!");
+//   })
+// });
+
 db.sequelize.sync({alter: true}).then(() => {
   app.listen(port, () => {
     console.log(`Server running on port ${port}`)
@@ -41,57 +50,6 @@ db.sequelize.sync({alter: true}).then(() => {
 
 // All user routes contained in /routes/userRoutes
 app.use('/users', require('./routes/userRoutes'))
-
-// Create database
-app.post("/createDatabase", (req, res) => {
-  let sql = 'CREATE DATABASE userDatabase';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("Database created!");
-  })
-});
-
-// Create users table
-app.post('/createUserTable', (req, res) => {
-  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), \
-  fName CHAR(255), lName CHAR(255), gender CHAR(20), age int, bio VARCHAR(255))';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("users table created!");
-  });
-});
-
-// Delete users table
-app.post('/deleteUserTable', (req, res) => {
-  let sql = 'DROP TABLE users';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("users table deleted!");
-  });
-});
-
-// Create messages table
-app.post('/createMessageTable', (req, res) => {
-  let sql = 'CREATE TABLE messages(id INT Primary KEY AUTO_INCREMENT, sender CHAR(20), receiver CHAR(20), content VARCHAR(255))';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("messages table created!");
-  });
-});
-
-// Delete messages table
-app.post('/deleteMessageTable', (req, res) => {
-  let sql = 'DROP TABLE messages';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("messages table deleted!");
-  });
-});
 
 app.get('/', (req,res) => {
   res.send("Home")
