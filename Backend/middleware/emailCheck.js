@@ -6,8 +6,8 @@ function emailCheck(email) {
       match = true;
     else
       match = false
-    return match
-  }
+    return match;
+}
 
 module.exports = {
     emailCheck

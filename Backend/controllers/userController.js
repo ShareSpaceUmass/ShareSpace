@@ -5,8 +5,9 @@ const dotenv = require('dotenv').config();
 const { sendMagicLinkEmail } = require('../middleware/sendLink')
 const crypto = require('crypto')
 const sharp = require('sharp')
-const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, GetObjectCommand, S3ServiceException } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const e = require("express");
 
 const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
@@ -29,15 +30,20 @@ const s3 = new S3Client({
 // @access Public
 const registerUser = async (req,res) => {
   try {
-    const user = {
-      email: req.body.email,
-      fName: req.body.fName,
-      lName: req.body.lName,
-      gender: req.body.gender
-    };
-  
-    await Users.create(user);
-    res.status(200).json({message:"User registered succesfully"});
+    const checkExistingEmail = await Users.findOne({where: {email: req.body.email}});
+    if(checkExistingEmail)
+      res.status(500).json({message: "Email is already registered."});
+    else{
+      const user = {
+        email: req.body.email,
+        fName: req.body.fName,
+        lName: req.body.lName,
+        gender: req.body.gender
+      };
+    
+      await Users.create(user);
+      res.status(200).json({message:"User registered succesfully"});
+    }
       
   } catch(err) {
     console.error(err);
