@@ -39,26 +39,25 @@ function SignupPage() {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
   }
 
-  const register = async() => {
+  const register = async () => {
     const user = { fName, lName, email, gender }
-    const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
-    const users = await userData.json()
-    if (users.some(e => e.email === email)) {
+
+    const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    response.then((res) => {
+    if (res.status === 500) {
       setUsedEmail(true)
     }
     else {
-      const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-      })
-      response.then((res) => res.json())
-        .then((data) => console.log(data))
       window.location.href = "/preferences"
-    }
+    }})
   }
+
 
   Aos.init({ duration: 1800, offset: 0 });
   return (
@@ -223,7 +222,7 @@ function SignupPage() {
             variant="contained"
             color="secondary"
             href="/login"
-            sx={{width:250}}
+            sx={{ width: 250 }}
           >Login
           </Button>
         </Stack>
