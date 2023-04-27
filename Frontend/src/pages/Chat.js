@@ -4,13 +4,14 @@ import Nav from "../components/Nav";
 import ChatWidget from "../components/chatbox-components/ChatWidget";
 import { InChat, OutChat } from "../components/chatbox-components/ChatBoxes";
 import Aos from "aos";
+import Header2 from "../components/Header2";
 
 
 function ChatPage() {
     Aos.init({ duration: 1000, offset: 0 });
     return (
         <Stack>
-            <Nav />
+            <Header2 />
             <Box
                 minHeight="80vh"
                 display="flex"
