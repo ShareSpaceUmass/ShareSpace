@@ -54,7 +54,7 @@ function SignupPage() {
       setUsedEmail(true)
     }
     else {
-      window.location.href = "/preferences"
+      window.location.href = "/quiz"
     }})
   }
 
