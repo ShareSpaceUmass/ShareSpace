@@ -1,17 +1,17 @@
 const express = require("express");
 const mysql = require("mysql2");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const { getUser } = require("./controllers/userController");
-const dotenv = require('dotenv').config();
+const { Users } = require("./models");
+const dotenv = require("dotenv").config();
 const app = express();
-const port = '3000';
-const db = require('./models');
+const port = "3000";
+const db = require("./models");
 
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({extended: false}));
-
+app.use(express.urlencoded({ extended: false }));
 
 // Connect
 // const db = mysql.createConnection({
@@ -20,7 +20,6 @@ app.use(express.urlencoded({extended: false}));
 //   password: '',
 //   database: 'userDatabase'
 // });
-
 
 // db.connect((err) => {
 //   if (err) {
@@ -42,34 +41,39 @@ app.use(express.urlencoded({extended: false}));
 //   })
 // });
 
-db.sequelize.sync({alter: true}).then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
   app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
-  })
-})
-
-// All user routes contained in /routes/userRoutes
-app.use('/users', require('./routes/userRoutes'))
-
-app.get('/', (req,res) => {
-  res.send("Home")
-})
-
-// Verifies token given in URL
-app.get("/verify", (req, res) => {
-  const token = req.query.token;
-  if(token == null) res.sendStatus(401);
-  try{
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    let user;
-    getUser(decodedToken, user);
-    res.send(`Authed as ${user}`)
-  }
-  catch(e){
-    res.sendStatus(401);
-  }
-  
+    console.log(`Server running on port ${port}`);
+  });
 });
 
+// All user routes contained in /routes/userRoutes
+app.use("/users", require("./routes/userRoutes"));
 
-module.exports = db; 
+app.get("/", (req, res) => {
+  res.send("Home");
+});
+
+// Verifies token given in URL
+app.get("/verify", async (req, res) => {
+  console.log("Verifying login from email...");
+  const token = req.query.token;
+  if (token == null) res.sendStatus(401);
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("token decoded:", decodedToken);
+    const user = await Users.findOne({
+      where: {
+        email: decodedToken.email,
+      },
+    });
+    console.log("✅ User verified:", user.email);
+
+    res.send(`Authed as ${user.email}`);
+  } catch (e) {
+    console.log("❌ ERROR: verifying login form email", e);
+    res.sendStatus(401);
+  }
+});
+
+module.exports = db;
