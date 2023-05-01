@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
       console.log("✅ Verification email sent to", req.body.email);
     } catch (e) {
       console.log("❌ Error logging in");
-      return res.status(500).json({message: "Error logging in. Please try again"}); //not entirely sure how to connect to frontend, but I think we use this to send
+      res.status(500).json({message: "Error logging in. Please try again"}); //not entirely sure how to connect to frontend, but I think we use this to send
       //json with this message up the chain
     }
   } else {
