@@ -2,6 +2,7 @@ import * as React from 'react';
 import { InputLabel, MenuItem, FormControl, Box, Stack, Typography, Button, TextField, Grid, Select, Alert, AlertTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png';
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
 import Aos from 'aos';
 
 function SignupPage() {
@@ -50,12 +51,13 @@ function SignupPage() {
       body: JSON.stringify(user)
     })
     response.then((res) => {
-    if (res.status === 500) {
-      setUsedEmail(true)
-    }
-    else {
-      window.location.href = "/quiz"
-    }})
+      if (res.status === 500) {
+        setUsedEmail(true)
+      }
+      else {
+        window.location.href = "/quiz"
+      }
+    })
   }
 
 
@@ -73,17 +75,19 @@ function SignupPage() {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            component="img"
-            sx={{
-              height: 500,
-              width: 700,
-              maxHeight: { xs: 100, md: 200 },
-              maxWidth: { xs: 250, md: 491 },
-            }}
-            alt="ShareSpaceLogo"
-            src={logo}
-          />
+          <Link to="/">
+            <Box
+              component="img"
+              sx={{
+                height: 500,
+                width: 700,
+                maxHeight: { xs: 100, md: 200 },
+                maxWidth: { xs: 250, md: 491 },
+              }}
+              alt="ShareSpaceLogo"
+              src={logo}
+            />
+          </Link>
           <Typography sx={{ typography: { md: 'h3', sm: 'body1' } }}>Ready to Find a Roommate?</Typography>
         </Stack>
       </Box>
