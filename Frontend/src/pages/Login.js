@@ -131,7 +131,7 @@ function LoginPage() {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} autoFocus>
-                        Agree
+                        Close
                     </Button>
                 </DialogActions>
             </Dialog>
