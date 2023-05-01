@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog,DialogActions, DialogContent, DialogContentText,DialogTitle } from '@mui/material';
+import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
 import Aos from 'aos';
 
 function emailError(error) {
@@ -72,17 +73,19 @@ function LoginPage() {
                 alignItems="center"
                 marginTop={-10}
             >
-                <Box
-                    component="img"
-                    sx={{
-                        height: 500,
-                        width: 700,
-                        maxHeight: { xs: 100, md: 200 },
-                        maxWidth: { xs: 250, md: 491 },
-                    }}
-                    alt="ShareSpaceLogo"
-                    src={logo}
-                />
+                <Link to="/">
+                    <Box
+                        component="img"
+                        sx={{
+                            height: 500,
+                            width: 700,
+                            maxHeight: { xs: 100, md: 200 },
+                            maxWidth: { xs: 250, md: 491 },
+                        }}
+                        alt="ShareSpaceLogo"
+                        src={logo}
+                    />
+                </Link>
                 <Stack
                     spacing={2}
                     maxWidth="30vw"
@@ -126,7 +129,7 @@ function LoginPage() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                    We've sent a verification email to the email address you provided. Please check your inbox (and spam folder, just in case) and click on the verification link to confirm your email address.
+                        We've sent a verification email to the email address you provided. Please check your inbox (and spam folder, just in case) and click on the verification link to confirm your email address.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
