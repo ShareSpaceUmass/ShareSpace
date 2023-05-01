@@ -46,6 +46,7 @@ function LoginPage() {
             body: JSON.stringify(emailJson)
         })
         response.then((res) => {
+            console.log(res.status)
             if (res.status === 500) {
                 setUsedEmail(true)
             } else {
