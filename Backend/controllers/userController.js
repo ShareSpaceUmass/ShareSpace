@@ -69,7 +69,7 @@ const loginUser = async (req, res) => {
       email: req.body.email,
     },
   });
-  if (user != null) {
+  if (user) {
     console.log("user found:", user.email);
     try {
       const token = jwt.sign(
