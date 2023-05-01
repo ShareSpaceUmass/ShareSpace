@@ -121,7 +121,14 @@ const getUser = async (req, res) => {
         email: req.body.email,
       },
     });
-    console.log("user found", user.email);
+
+    const getObjectParams = {
+      Bucket: bucketName,
+      Key: imageName,
+    };
+    const getCommand = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, getCommand);
+    updatedUser.imageUrl = url;
     res.send(user);
     console.log("✅ user sent to frontend");
   } catch (err) {
@@ -177,18 +184,9 @@ const updateUserData = async (req, res) => {
       Body: buffer,
       ContentType: req.file.mimetype,
     };
-
     const postCommand = new PutObjectCommand(params);
     await s3.send(postCommand);
-    updatedUser.profilePic = imageName;
-
-    const getObjectParams = {
-      Bucket: bucketName,
-      Key: imageName,
-    };
-    const getCommand = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3, getCommand);
-    updatedUser.imageUrl = url;
+    updatedUser.profilePic = imageName;    
   }
 
   try {
