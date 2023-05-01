@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle } from '@mui/material';
+import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog,DialogActions, DialogContent, DialogContentText,DialogTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
 import Aos from 'aos';
@@ -20,10 +20,12 @@ function emailError(error) {
     }
 }
 
+
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [validEmail, setValidEmail] = useState(false)
     const [usedEmail, setUsedEmail] = useState(false)
+    const [open, setOpen] = useState(false)
 
     //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
@@ -34,28 +36,27 @@ function LoginPage() {
 
     //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = async () => {
-        const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
-        const users = await userData.json()
-        console.log(users.some(e => e.email === email))
-        if (!users.some(e => e.email === email)) {
-            setUsedEmail(true)
-        }
-        else {
-            const emailJson = { email }
-
-            const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/login/", {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(emailJson)
-            })
-            response.then((res) => res.json())
-                .then((data) => console.log(data))
-        }
+        const emailJson = { email }
+        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(emailJson)
+        })
+        response.then((res) => {
+            if (res.status === 500) {
+                setUsedEmail(true)
+            } else {
+                setOpen(true)
+            }
+        })
     }
 
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     Aos.init({ duration: 1800, offset: 0 });
     return (
@@ -88,7 +89,7 @@ function LoginPage() {
 
                 >
                     <TextField
-                        error = {validEmail}
+                        error={validEmail}
                         id="email"
                         label="Email"
                         variant="outlined"
@@ -116,6 +117,24 @@ function LoginPage() {
                     >Register</Button>
                 </Stack>
             </Stack>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"In order to complete your sign in, we just need you to verify your email address."}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                    We've sent a verification email to the email address you provided. Please check your inbox (and spam folder, just in case) and click on the verification link to confirm your email address.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>
+                        Agree
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }

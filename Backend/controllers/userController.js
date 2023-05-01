@@ -80,15 +80,15 @@ const loginUser = async (req, res) => {
         }
       );
       await sendMagicLinkEmail(req.body.email, token);
-      res.json("User is in db");
+      res.status(200).json(message: "User is in db");
       console.log("✅ Verification email sent to", req.body.email);
     } catch (e) {
       console.log("❌ Error logging in");
-      return res.json("Error logging in. Please try again"); //not entirely sure how to connect to frontend, but I think we use this to send
+      return res.status(500).json(message: "Error logging in. Please try again"); //not entirely sure how to connect to frontend, but I think we use this to send
       //json with this message up the chain
     }
   } else {
-    res.json("Email not registered");
+    res.status(500).json(message: "Email not registered");
     console.log("❌ user not found in db");
   }
 };
@@ -186,7 +186,7 @@ const updateUserData = async (req, res) => {
     };
     const postCommand = new PutObjectCommand(params);
     await s3.send(postCommand);
-    updatedUser.profilePic = imageName;    
+    updatedUser.profilePic = imageName;
   }
 
   try {
