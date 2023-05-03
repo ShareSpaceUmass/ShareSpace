@@ -139,6 +139,10 @@ const getUser = async (req, res) => {
         email: req.body.email,
       },
     });
+    if (!user) {
+      console.log("❌ user was not found in db");
+      res.status(500).json({ error: "user was not found in database" });
+    }
     console.log("user found", user.email);
     res.send(user);
     console.log("✅ user sent to frontend");
