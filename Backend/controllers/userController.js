@@ -98,14 +98,16 @@ const loginUser = async (req, res) => {
       // want to return a jwt for the user here
     } catch (e) {
       console.log("❌ Error logging in");
-      return res.json("Error logging in. Please try again"); //not entirely sure how to connect to frontend, but I think we use this to send
+      return res
+        .status(500)
+        .json({ error: "Error logging in. Please try again" }); //not entirely sure how to connect to frontend, but I think we use this to send
       //json with this message up the chain
     }
   } else {
     console.log("❌ user not found in db");
     res
       .status(500)
-      .json({ message: "The user provided was not found in the database" });
+      .json({ error: "The user provided was not found in the database" });
   }
 };
 
