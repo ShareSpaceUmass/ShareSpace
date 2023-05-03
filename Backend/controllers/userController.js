@@ -21,6 +21,7 @@ const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+const cache = require("../utils/cache");
 
 const s3 = new S3Client({
   credentials: {
@@ -80,8 +81,19 @@ const loginUser = async (req, res) => {
         }
       );
       await sendMagicLinkEmail(req.body.email, token);
-      res.json("User is in db");
       console.log("✅ Verification email sent to", req.body.email);
+
+      // wait for link to be pressed in email
+      console.log(`waiting for ${req.body.email} to login via email`);
+      let pollingInterval = setInterval(() => {
+        const linkClicked = cache.get(token);
+        if (linkClicked) {
+          console.log("✅ link click has been detected");
+          clearInterval(pollingInterval);
+          res.send({ token: token });
+        }
+      }, 1000);
+      // want to return a jwt for the user here
     } catch (e) {
       console.log("❌ Error logging in");
       return res.json("Error logging in. Please try again"); //not entirely sure how to connect to frontend, but I think we use this to send
