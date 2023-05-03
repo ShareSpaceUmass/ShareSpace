@@ -90,7 +90,9 @@ const loginUser = async (req, res) => {
         if (linkClicked) {
           console.log("✅ link click has been detected");
           clearInterval(pollingInterval);
-          res.send({ token: token });
+          res
+            .status(200)
+            .json({ token: token, message: "User successfully logged in" });
         }
       }, 1000);
       // want to return a jwt for the user here
@@ -100,8 +102,10 @@ const loginUser = async (req, res) => {
       //json with this message up the chain
     }
   } else {
-    res.json("Email not registered");
     console.log("❌ user not found in db");
+    res
+      .status(500)
+      .json({ message: "The user provided was not found in the database" });
   }
 };
 
