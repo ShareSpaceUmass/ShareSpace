@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement : true
         },
+        email:{
+            type: DataTypes.STRING
+        },
         cleanliness:{
             type: DataTypes.INTEGER
         },

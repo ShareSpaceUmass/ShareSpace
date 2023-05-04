@@ -5,17 +5,17 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement : true
         },
-        userID:{
-            type: DataTypes.INTEGER
+        senderEmail:{
+            type: DataTypes.CHAR(255)
         },
-        receiverID:{
+        receiverEmail:{
             type: DataTypes.INTEGER
         },
         content:{
-            type: DataTypes.CHAR(255)
+            type: DataTypes.TEXT
         },
-        timeSent:{
-            type: DataTypes.INTEGER
+        read:{
+            type: DataTypes.BOOLEAN
         }
 
     });
