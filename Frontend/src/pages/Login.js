@@ -81,9 +81,10 @@ function LoginPage() {
                         }
                     )) {
                         window.location.href = "/profile"
-                    } else {
-                        setUsedEmail(true)
                     }
+                }
+                else {
+                    setUsedEmail(true)
                 }
             })
         //}
