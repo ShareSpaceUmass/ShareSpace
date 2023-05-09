@@ -43,7 +43,7 @@ function LoginPage() {
         const emailJson = { email }
 
         //Checks if email is a registered email
-        /*
+        
         const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
             method: 'POST',
             mode: 'cors',
@@ -60,28 +60,32 @@ function LoginPage() {
                 setOpen(true)
             }
         })
-        */
+        
 
-        //if (usedEmail === false) {
-            const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: simpleStringify(emailJson)
+        if (usedEmail === false) {
+        const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: simpleStringify(emailJson)
+        })
+        sendEmail.then((res) => {
+            if (res.status === 200) {
+                res.json()
+            }
+            else {
+                setUsedEmail(true)
+            }
+        })
+            .then((res) => {
+                setCookie('email', res.token.email, { path: '/' })
+                setCookie('token', res.token.iat, { path: '/' })
+                setCookie('experation', res.token.exp, { path: '/' })
+                window.location.href = "/quiz"
             })
-            sendEmail.then((res) => {
-                if (res.status === 200) {
-                    setCookie('token', '123456789', { path: '/' })
-                    setCookie('experation', 'time', { path: '/' })
-                    window.location.href = "/quiz"
-                }
-                else {
-                    setUsedEmail(true)
-                }
-            })
-        //}
+        }
     }
 
     const handleClose = () => {
@@ -171,18 +175,18 @@ function LoginPage() {
     )
 }
 
-function simpleStringify (object){
+function simpleStringify(object) {
     // stringify an object, avoiding circular structures
     // https://stackoverflow.com/a/31557814
     var simpleObject = {};
-    for (var prop in object ){
-        if (!object.hasOwnProperty(prop)){
+    for (var prop in object) {
+        if (!object.hasOwnProperty(prop)) {
             continue;
         }
-        if (typeof(object[prop]) == 'object'){
+        if (typeof (object[prop]) == 'object') {
             continue;
         }
-        if (typeof(object[prop]) == 'function'){
+        if (typeof (object[prop]) == 'function') {
             continue;
         }
         simpleObject[prop] = object[prop];

@@ -70,14 +70,7 @@ const registerUser = async (req, res) => {
 // @access Public
 const loginUser = async (req, res) => {
   console.log("logging in user...");
-  const user = await Users.findOne({
-    where: {
-      email: req.body.email,
-    },
-  });
-  if (user) {
-    console.log("user found:", user.email);
-    try {
+  try {
       const token = jwt.sign(
         { email: req.body.email },
         process.env.JWT_SECRET,
@@ -86,7 +79,6 @@ const loginUser = async (req, res) => {
         }
       );
       await sendMagicLinkEmail(req.body.email, token);
-      res.json("User is in db");
       console.log("✅ Verification email sent to", req.body.email);
 
       // wait for link to be pressed in email
@@ -109,13 +101,8 @@ const loginUser = async (req, res) => {
         .json({ error: "Error logging in. Please try again" }); //not entirely sure how to connect to frontend, but I think we use this to send
       //json with this message up the chain
     }
-  } else {
-    console.log("❌ user not found in db");
-    res
-      .status(500)
-      .json({ error: "The user provided was not found in the database" });
   }
-};
+
 
 // @desc   Delete an existing user
 // @route  DELETE /users/deleteUser
@@ -156,6 +143,7 @@ const getUser = async (req, res) => {
   try {
     //TODO:
     //Figure out how to join these 2 tables
+    console.log("Checking user")
     const user = await Users.findOne({
       where: {
         email: req.body.email
