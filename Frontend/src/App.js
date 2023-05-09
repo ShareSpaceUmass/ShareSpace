@@ -14,24 +14,20 @@ import PreferencePage from "./pages/Preferences";
 import ProfilePage from "./pages/Profile"
 import MatchPage from "./pages/Matches"
 import ChatPage from "./pages/Chat";
-import { AuthProvider, useIsAuthenticated } from 'react-auth-kit'
-
+import { CookiesProvider,useCookies } from 'react-cookie';
 
 
 
 function App() {
-  //https://github.com/react-auth-kit/react-auth-kit/issues/1023
+  const [cookies, setCookie] = useCookies(['name']);
+
   const PrivateRoute = ({ Component }) => {
-    const isAuthenticated = useIsAuthenticated();
-    const auth = isAuthenticated();
+    const auth = (cookies.token!=null)
     return auth ? <Component /> : <Navigate to="/login" />;
   };
 
   return (
-    <AuthProvider authType={'cookie'}
-    authName={'_auth'}
-    cookieDomain={window.location.hostname}
-    cookieSecure={window.location.protocol === "https:"}>
+    <CookiesProvider>
     <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
@@ -46,7 +42,7 @@ function App() {
           </Routes>
         </BrowserRouter>
     </ThemeProvider>
-    </AuthProvider>
+    </CookiesProvider>
   );
 }
 

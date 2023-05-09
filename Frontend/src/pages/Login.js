@@ -3,7 +3,7 @@ import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog, D
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
-import { useSignIn } from 'react-auth-kit'
+import { useCookies } from 'react-cookie';
 
 import Aos from 'aos';
 
@@ -29,7 +29,7 @@ function LoginPage() {
     const [validEmail, setValidEmail] = useState(false)
     const [usedEmail, setUsedEmail] = useState(false)
     const [open, setOpen] = useState(false)
-    const signIn = useSignIn()
+    const [cookies, setCookie] = useCookies(['name']);
 
     //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
@@ -73,15 +73,9 @@ function LoginPage() {
             })
             sendEmail.then((res) => {
                 if (res.status === 200) {
-                    if (signIn(
-                        {
-                            token: "1234556",
-                            expiresIn: "24",
-                            tokenType: "Bearer",
-                        }
-                    )) {
-                        console.log("reached")
-                    }
+                    setCookie('token', '123456789', { path: '/' })
+                    setCookie('experation', 'time', { path: '/' })
+                    window.location.href = "/quiz"
                 }
                 else {
                     setUsedEmail(true)
