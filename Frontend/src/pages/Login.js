@@ -38,7 +38,8 @@ function LoginPage() {
     //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = async () => {
         const emailJson = { email }
-        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+
+        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -50,9 +51,17 @@ function LoginPage() {
             if (res.status === 500) {
                 setUsedEmail(true)
             } else {
-                setOpen(true)
+                fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(emailJson)
+                })
             }
         })
+
     }
 
     const handleClose = () => {
