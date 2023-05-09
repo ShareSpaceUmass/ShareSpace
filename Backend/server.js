@@ -73,7 +73,7 @@ app.get("/verify", async (req, res) => {
     });
     console.log("✅ User verified:", user.email);
     cache.set("token", decodedToken, 10000)
-    res.send(`Authed as ${user.email}`);
+    res.send(`Authed as ${user.email}. You can close this page and continue back to the login page.`);
   } catch (e) {
     console.log("❌ ERROR: verifying login form email", e);
     res.sendStatus(401);
