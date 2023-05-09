@@ -80,7 +80,7 @@ function LoginPage() {
                             tokenType: "Bearer",
                         }
                     )) {
-                        window.location.href = "/profile"
+                        console.log("reached")
                     }
                 }
                 else {
