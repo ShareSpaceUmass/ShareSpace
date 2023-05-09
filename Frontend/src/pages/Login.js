@@ -43,6 +43,7 @@ function LoginPage() {
         const emailJson = { email }
 
         //Checks if email is a registered email
+        /*
         const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
             method: 'POST',
             mode: 'cors',
@@ -59,8 +60,9 @@ function LoginPage() {
                 setOpen(true)
             }
         })
+        */
 
-        if (usedEmail === false) {
+        //if (usedEmail === false) {
             const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
                 method: 'POST',
                 mode: 'cors',
@@ -80,11 +82,11 @@ function LoginPage() {
                     )) {
                         window.location.href = "/profile"
                     } else {
-                        console.error("Login Failed")
+                        setUsedEmail(true)
                     }
                 }
             })
-        }
+        //}
     }
 
     const handleClose = () => {
