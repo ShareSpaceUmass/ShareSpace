@@ -45,7 +45,7 @@ function LoginPage() {
         //Checks if email is a registered email
         
         const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
-            method: 'POST',
+            method: 'GET',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
