@@ -3,6 +3,8 @@ import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog, D
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
 import { Link } from 'react-router-dom'
+import { useSignIn } from 'react-auth-kit'
+
 import Aos from 'aos';
 
 function emailError(error) {
@@ -27,6 +29,7 @@ function LoginPage() {
     const [validEmail, setValidEmail] = useState(false)
     const [usedEmail, setUsedEmail] = useState(false)
     const [open, setOpen] = useState(false)
+    const signIn = useSignIn()
 
     //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
@@ -38,21 +41,50 @@ function LoginPage() {
     //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = async () => {
         const emailJson = { email }
-        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+
+        //Checks if email is a registered email
+        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
             method: 'POST',
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(emailJson)
+            body: simpleStringify(emailJson)
         })
         response.then((res) => {
             if (res.status === 500) {
                 setUsedEmail(true)
             } else {
+                console.log("Email is registered")
                 setOpen(true)
             }
         })
+
+        if (usedEmail === false) {
+            const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: simpleStringify(emailJson)
+            })
+            sendEmail.then((res) => {
+                if (res.status === 200) {
+                    if (signIn(
+                        {
+                            token: "1234556",
+                            expiresIn: "24",
+                            tokenType: "Bearer",
+                        }
+                    )) {
+                        window.location.href = "/profile"
+                    } else {
+                        console.error("Login Failed")
+                    }
+                }
+            })
+        }
     }
 
     const handleClose = () => {
@@ -141,5 +173,25 @@ function LoginPage() {
         </Box>
     )
 }
+
+function simpleStringify (object){
+    // stringify an object, avoiding circular structures
+    // https://stackoverflow.com/a/31557814
+    var simpleObject = {};
+    for (var prop in object ){
+        if (!object.hasOwnProperty(prop)){
+            continue;
+        }
+        if (typeof(object[prop]) == 'object'){
+            continue;
+        }
+        if (typeof(object[prop]) == 'function'){
+            continue;
+        }
+        simpleObject[prop] = object[prop];
+    }
+    return JSON.stringify(simpleObject); // returns cleaned up JSON
+};
+
 
 export default LoginPage
