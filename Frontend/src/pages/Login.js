@@ -73,16 +73,17 @@ function LoginPage() {
         })
         sendEmail.then((res) => {
             if (res.status === 200) {
-                res.json()
+                console.log(res)
+                return res.json()
             }
             else {
                 setUsedEmail(true)
             }
         })
-            .then((res) => {
-                setCookie('email', res.token.email, { path: '/' })
-                setCookie('token', res.token.iat, { path: '/' })
-                setCookie('experation', res.token.exp, { path: '/' })
+            .then((response) => {
+                console.log(response)
+                setCookie('token', response.token, { path: '/' })
+                setCookie('email', email, { path: '/' })
                 window.location.href = "/quiz"
             })
         }
