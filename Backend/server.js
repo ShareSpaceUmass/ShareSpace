@@ -78,6 +78,7 @@ app.get("/verify", async (req, res) => {
     console.log("❌ ERROR: verifying login form email", e);
     res.sendStatus(401);
   }
+  window.close();
 });
 
 module.exports = db;
