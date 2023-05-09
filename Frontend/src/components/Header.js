@@ -4,19 +4,19 @@ import logo from '../public/images/ShareSpaceLogo.png'
 
 const Header = () => {
     return (
-        <header class="bg-gradient-to-b from-[#ffffff] to-[#fbe2ff61]">
-            <nav className='py-4 px-12 flex justify-between'>
+        <header class="bg-gradient-to-b from-[#fdfdfd] to-[#fcfcfc67]">
+            <nav className='py-4 px-12 text-[18px] flex justify-between'>
                 <Link to='/'>
                     <div>
-                        <img className="w-28" src={logo} alt="ShareSpace logo" />
+                        <img className="w-[135px]" src={logo} alt="ShareSpace logo" />
                     </div>
                 </Link>
-                <div>
+                <div className='px-4'>
                     <Link to="/login">
-                        <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' style={{ margin: "5px" }}>Login</button>
+                        <button className="btn-quaternary font-ubuntu px-4" data-aos='fade-down' data-aos-delay='600' style={{ margin: "5px" }}>Login</button>
                     </Link>
                     <Link to="/signup">
-                        <button className="btn-secondary xl:mb-6 font-ubuntu" data-aos='fade-down' data-aos-delay='600' style={{ margin: "5px" }}>Register</button>
+                        <button className="btn-secondary font-ubuntu px-4" data-aos='fade-down' data-aos-delay='600' style={{ margin: "5px" }}>Register</button>
                     </Link>
                 </div>
             </nav>
