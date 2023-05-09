@@ -12,7 +12,7 @@ router.post('/login', loginUser);
 router.post('/updateUser', upload.single('image'), updateUserData);
 router.delete('/deleteUser', deleteUser);
 router.delete('/deleteAllUsers', deleteAllUsers);
-router.get('/getUser', getUser);
+router.POST('/getUser', getUser);
 router.get('/getAllUsers', getAllUsers);
 router.post('/addUserPreferences', addUserPreferences);
 router.get('/getAllMessages', getAllMessages);
