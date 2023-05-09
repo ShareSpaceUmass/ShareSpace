@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Users } = require("../models");
-const { Messages } = require("../models");
+const { Users, Messages, Preferences } = require("../models");
 const dotenv = require("dotenv").config();
 const { sendMagicLinkEmail } = require("../middleware/sendLink");
 const crypto = require("crypto");
@@ -13,6 +12,12 @@ const {
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const e = require("express");
+
+Users.hasOne(Preferences);
+Preferences.belongsTo(Users);
+
+Users.hasMany(Messages);
+Messages.belongsTo(Users);
 
 const randomImageName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
@@ -94,12 +99,11 @@ const loginUser = async (req, res) => {
 };
 
 // @desc   Delete an existing user
-// @route  POST /users/deleteUser/:userId
-// @access Public
+// @route  DELETE /users/deleteUser
+// @access Private
 const deleteUser = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const deleted = await Users.destroy({ where: { id: userId } });
+    const deleted = await Users.destroy({ where: { email: req.body.email } });
     console.log(`Deleted user: ${deleted}`);
     res.status(200).json({ message: "User deleted succesfully" });
   } catch (err) {
@@ -110,27 +114,58 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// @desc   Delete all users
+// @route  DELETE /users/deleteAllUsers
+// @access Private
+const deleteAllUsers = async (req, res) => {
+  try {
+    await Users.destroy({ where: {} });
+    console.log(`Deleted all users`);
+    res.status(200).json({ message: "All users deleted" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting all users." });
+  }
+};
+
 // @desc   Get user
-// @route  GET /getUser/:userId
+// @route  GET /getUser
 // @access Private
 const getUser = async (req, res) => {
-  console.log(`getting user: ${req.body.email} ...`);
   try {
+    //TODO:
+    //Figure out how to join these 2 tables
     const user = await Users.findOne({
       where: {
-        email: req.body.email,
+        email: req.body.email
+      },
+    });
+
+    const userPreferences = await Preferences.findOne({
+      where: {
+        email: req.body.email
       },
     });
 
     const getObjectParams = {
       Bucket: bucketName,
-      Key: imageName,
+      Key: user.dataValues.profilePic
     };
     const getCommand = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3, getCommand);
-    updatedUser.imageUrl = url;
-    res.send(user);
+    await Users.update(
+      {
+        imageUrl: url
+      }, 
+      {
+        where: { email: req.body.email }
+      }
+    );
+    res.send({user, userPreferences});
     console.log("✅ user sent to frontend");
+
   } catch (err) {
     console.log("❌ error getting user:", err);
     res
@@ -157,21 +192,37 @@ const getAllUsers = async (req, res) => {
 };
 
 // @desc   Update user data
-// @route  POST /updateUser/:userId
+// @route  POST /updateUser
 // @access Private
 const updateUserData = async (req, res) => {
-  let userId = req.params.userId;
   let changedPfp = req.body.changedPfp;
 
   const updatedUser = {
-    email: req.body.email,
     fName: req.body.fName,
     lName: req.body.lName,
     gender: req.body.gender,
     age: req.body.age,
     bio: req.body.bio,
+    year: req.body.year,
+    major: req.body.major,
+    cleanliness: req.body.cleanliness,
+    guests: req.body.guests,
+    timeInRoom: req.body.timeInRoom,
+    noise: req.body.noise,
+    pets: req.body.pets,
+    earlyBird: req.body.earlyBird
   };
 
+  const updatedPreference = {
+    cleanliness: req.body.prefCleanliness,
+    guests: req.body.prefGuests,
+    timeInRoom: req.body.prefTimeInRoom,
+    noise: req.body.prefNoise,
+    pets: req.body.prefPets,
+    earlyBird: req.body.prefEarlyBird,
+    drugs: req.body.prefDrugs
+  };
+  
   if (changedPfp) {
     const imageName = randomImageName();
     //resize image
@@ -191,8 +242,13 @@ const updateUserData = async (req, res) => {
 
   try {
     await Users.update(updatedUser, {
-      where: { id: userId },
+      where: { email: req.body.email },
     });
+
+    await Preferences.update(updatedPreference, {
+      where: { email: req.body.email },
+    });
+    
     res.send("Field updated");
     console.log("Field successfully updated.");
   } catch (err) {
@@ -203,11 +259,87 @@ const updateUserData = async (req, res) => {
   }
 };
 
+
+// @desc   Adds a user's preferences
+// @route  POST /addUserPreferences
+// @access Public
+const addUserPreferences = async (req, res) => {
+  try {
+    const preference = {
+      email: req.body.email,
+      cleanliness: req.body.cleanliness,
+      guests: req.body.cleanliness,
+      timeInRoom: req.body.timeInRoom,
+      noise: req.body.noise,
+      pets: req.body.pets,
+      earlyBird: req.body.earlyBird,
+      drugs: req.body.drugs
+    };
+
+    await Preferences.create(preference);
+    res.status(200).json({ message: "User preferences added succesfully" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding user preferences." });
+  }
+};
+
+// @desc   Get all of a user's messages, sorted by most recent
+// @route  GET /getAllMessages
+// @access Private
+const getAllMessages = async (req, res) => {
+  try {
+    const unreadMessages = await Messages.findAll({
+      where: {
+        senderEmail: req.body.senderEmail,
+        read: false
+      },
+      order: [
+        ['updatedAt', 'DESC']
+      ]
+    });
+    res.send(messages);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching all unread messages." });
+  }
+};
+
+// @desc   Adds a message to the table
+// @route  POST /addMessage
+// @access Public
+const addMessage = async (req, res) => {
+  try {
+    const message = {
+      senderEmail: req.body.senderEmail,
+      receiverEmail: req.body.receiverEmail,
+      content: req.body.conten,
+      read: false
+    };
+
+    await Messages.create(message);
+    res.status(200).json({ message: "User preferences added succesfully" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding user preferences." });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
-  deleteUser,
-  getUser,
   updateUserData,
+  deleteUser,
+  deleteAllUsers,
+  getUser,
   getAllUsers,
+  addUserPreferences,
+  getAllMessages,
+  addMessage
 };
