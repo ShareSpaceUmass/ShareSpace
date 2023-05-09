@@ -26,6 +26,7 @@ const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+const cache = require("../utils/cache");
 
 const s3 = new S3Client({
   credentials: {
@@ -85,16 +86,34 @@ const loginUser = async (req, res) => {
         }
       );
       await sendMagicLinkEmail(req.body.email, token);
-      res.status(200).json({message: "User is in db"});
+      res.json("User is in db");
       console.log("✅ Verification email sent to", req.body.email);
+
+      // wait for link to be pressed in email
+      console.log(`waiting for ${req.body.email} to login via email`);
+      let pollingInterval = setInterval(() => {
+        const linkClicked = cache.get(token);
+        if (linkClicked) {
+          console.log("✅ link click has been detected");
+          clearInterval(pollingInterval);
+          res
+            .status(200)
+            .json({ token: token, message: "User successfully logged in" });
+        }
+      }, 1000);
+      // want to return a jwt for the user here
     } catch (e) {
       console.log("❌ Error logging in");
-      res.status(500).json({message: "Error logging in. Please try again"}); //not entirely sure how to connect to frontend, but I think we use this to send
+      return res
+        .status(500)
+        .json({ error: "Error logging in. Please try again" }); //not entirely sure how to connect to frontend, but I think we use this to send
       //json with this message up the chain
     }
   } else {
-    res.status(500).json({message: "Email not registered"});
     console.log("❌ user not found in db");
+    res
+      .status(500)
+      .json({ error: "The user provided was not found in the database" });
   }
 };
 
@@ -142,28 +161,12 @@ const getUser = async (req, res) => {
         email: req.body.email
       },
     });
-
-    const userPreferences = await Preferences.findOne({
-      where: {
-        email: req.body.email
-      },
-    });
-
-    const getObjectParams = {
-      Bucket: bucketName,
-      Key: user.dataValues.profilePic
-    };
-    const getCommand = new GetObjectCommand(getObjectParams);
-    const url = await getSignedUrl(s3, getCommand);
-    await Users.update(
-      {
-        imageUrl: url
-      }, 
-      {
-        where: { email: req.body.email }
-      }
-    );
-    res.send({user, userPreferences});
+    if (!user) {
+      console.log("❌ user was not found in db");
+      res.status(500).json({ error: "user was not found in database" });
+    }
+    console.log("user found", user.email);
+    res.send(user);
     console.log("✅ user sent to frontend");
 
   } catch (err) {
