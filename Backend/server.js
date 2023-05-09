@@ -8,6 +8,7 @@ const dotenv = require("dotenv").config();
 const app = express();
 const port = "3000";
 const db = require("./models");
+const cache = require("./utils/cache");
 
 app.use(express.json());
 app.use(cors());
@@ -41,7 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 //   })
 // });
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ alter: true, logging: false }).then(() => {
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
@@ -59,6 +60,9 @@ app.get("/verify", async (req, res) => {
   console.log("Verifying login from email...");
   const token = req.query.token;
   if (token == null) res.sendStatus(401);
+
+  cache.set(token, true);
+  console.log(`${req.query.email} clicked thier login link`);
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     console.log("token decoded:", decodedToken);
@@ -68,7 +72,7 @@ app.get("/verify", async (req, res) => {
       },
     });
     console.log("✅ User verified:", user.email);
-
+    cache.set("token", decodedToken, 10000)
     res.send(`Authed as ${user.email}`);
   } catch (e) {
     console.log("❌ ERROR: verifying login form email", e);
