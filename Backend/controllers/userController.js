@@ -292,10 +292,11 @@ const userCompletedPreferences = async (req, res) => {
       console.log("❌ user was not found in db");
       res.status(500).json({ error: "user was not found in database" });
     }
-    let prefs = ["email", "cleanliness", "guests", "timeInRoom", "noise", "pets", "earlyBird", "drugs"];
+    let prefs = ["email", "cleanliness", "guests", "timeInRoom", "noise", "pets", "earlyBird"];
     let hasProps = true;
+    
     prefs.forEach(preference => {
-      hasProps = hasProps && user.hasOwnProperty("prop") && user[preference] != null;
+      hasProps = hasProps && user.dataValues.hasOwnProperty(preference) && user.dataValues[preference] != null;
     });
 
     console.log("preferences checked, completed: ", hasProps);

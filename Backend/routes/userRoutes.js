@@ -15,7 +15,7 @@ router.delete('/deleteAllUsers', deleteAllUsers);
 router.post('/getUser', getUser);
 router.get('/getAllUsers', getAllUsers);
 router.post('/addUserPreferences', addUserPreferences);
-router.post('/userCompletedPreferences', userCompletedPreferences);
+router.get('/userCompletedPreferences', userCompletedPreferences);
 router.get('/getAllMessages', getAllMessages);
 router.post('/addMessage', addMessage);
 
