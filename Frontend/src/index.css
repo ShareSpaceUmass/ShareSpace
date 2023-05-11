@@ -33,7 +33,7 @@
   }
 
   .btn-quaternary {
-    @apply bg-[#6551754f] text-base font-bold text-primary hover:bg-[#d1c2d5];
+    @apply text-[#331643] hover:text-[#b47cdf];
   }
 
   .h1 {

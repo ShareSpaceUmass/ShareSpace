@@ -1,132 +1,299 @@
-const jwt = require("jsonwebtoken")
-const { Users } = require('../models')
-const { Messages } = require('../models')
-const dotenv = require('dotenv').config();
-const { sendMagicLinkEmail } = require('../middleware/sendLink')
+const jwt = require("jsonwebtoken");
+const { Users, Messages } = require("../models");
+const dotenv = require("dotenv").config();
+const { sendMagicLinkEmail } = require("../middleware/sendLink");
+const crypto = require("crypto");
+const sharp = require("sharp");
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  S3ServiceException,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const e = require("express");
+
+const bucketName = process.env.BUCKET_NAME;
+const bucketRegion = process.env.BUCKET_REGION;
+const accessKey = process.env.ACCESS_KEY;
+const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+const cache = require("../utils/cache");
+
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey,
+  },
+  region: bucketRegion,
+});
+
 // @desc   Register a new user
 // @route  POST /users
 // @access Public
-const registerUser = async (req,res) => {
+const registerUser = async (req, res) => {
   try {
-    const user = {
-      email: req.body.email,
-      fName: req.body.fName,
-      lName: req.body.lName,
-      gender: req.body.gender
-    };
-  
-    await Users.create(user);
-    res.status(200).json({message:"User registered succesfully"});
-      
-  } catch(err) {
+    const checkExistingEmail = await Users.findOne({
+      where: { email: req.body.email },
+    });
+    if (checkExistingEmail)
+      res.status(500).json({ message: "Email is already registered." });
+    else {
+      const user = {
+        email: req.body.email,
+        fName: req.body.fName,
+        lName: req.body.lName,
+        gender: req.body.gender,
+      };
+
+      await Users.create(user);
+      res.status(200).json({ message: "User registered succesfully" });
+    }
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message: "An error occurred while registering the user."});
+    res
+      .status(500)
+      .json({ message: "An error occurred while registering the user." });
   }
-}
+};
 
 // @desc   Authenticate a user
 // @route  POST /users/login
 // @access Public
 const loginUser = async (req, res) => {
-  let user;
-  getUser(req.body.email, user)
-  if (user != null) {
-    try {
-      const token = jwt.sign({userId: req.body.email}, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      })
-      await sendMagicLinkEmail(req.body.email, token)
+  console.log("logging in user...");
+  try {
+      const token = jwt.sign(
+        { email: req.body.email },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "1h",
+        }
+      );
+      await sendMagicLinkEmail(req.body.email, token);
+      console.log("✅ Verification email sent to", req.body.email);
+
+      // wait for link to be pressed in email
+      console.log(`waiting for ${req.body.email} to login via email`);
+      let pollingInterval = setInterval(() => {
+        const linkClicked = cache.get(token);
+        if (linkClicked) {
+          console.log("✅ link click has been detected");
+          clearInterval(pollingInterval);
+          res
+            .status(200)
+            .json({ token: token, message: "User successfully logged in" });
+        }
+      }, 1000);
+      // want to return a jwt for the user here
     } catch (e) {
-      console.log(e)
-      return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
-                                                            //json with this message up the chain
+      console.log("❌ Error logging in");
+      return res
+        .status(500)
+        .json({ error: "Error logging in. Please try again" }); //not entirely sure how to connect to frontend, but I think we use this to send
+      //json with this message up the chain
     }
   }
 
-  res.json("Email not registered")
-}
 
 // @desc   Delete an existing user
-// @route  POST /users/deleteUser/:userId
-// @access Public
-const deleteUser = async (req,res) => {
+// @route  DELETE /users/deleteUser
+// @access Private
+const deleteUser = async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const deleted = await Users.destroy({where: {id: userId}});
+    const deleted = await Users.destroy({ where: { email: req.body.email } });
     console.log(`Deleted user: ${deleted}`);
-    res.status(200).json({message:"User deleted succesfully"});
-  } catch(err) {
+    res.status(200).json({ message: "User deleted succesfully" });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message: "An error occurred while deleting the user."});
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the user." });
   }
-}
+};
+
+// @desc   Delete all users
+// @route  DELETE /users/deleteAllUsers
+// @access Private
+const deleteAllUsers = async (req, res) => {
+  try {
+    await Users.destroy({ where: {} });
+    console.log(`Deleted all users`);
+    res.status(200).json({ message: "All users deleted" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting all users." });
+  }
+};
 
 // @desc   Get user
-// @route  GET /getUser/:userId
+// @route  GET /getUser
 // @access Private
-const getUser = async (req,res) => {
+const getUser = async (req, res) => {
   try {
-    const user = await Users.findAll({
+    console.log("Checking user")
+    const user = await Users.findOne({
       where: {
-        id: req.params.userId
-      }
+        email: req.body.email
+      },
     });
+    if (!user) {
+      console.log("❌ user was not found in db");
+      res.status(500).json({ error: "user was not found in database" });
+    }
+    console.log("user found", user.email);
     res.send(user);
-    console.log("User fetched: ", JSON.stringify(user, null));
-  } 
-  catch(err) {
-    console.error(err);
-    res.status(500).json({message: "An error occurred while fetching this user."});
+    console.log("✅ user sent to frontend");
+
+  } catch (err) {
+    console.log("❌ error getting user:", err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching this user." });
   }
-}
+};
 
 // @desc   Get all users
 // @route  GET /getAllUsers
 // @access Private
 const getAllUsers = async (req, res) => {
+  console.log("getting all users...");
   try {
     const users = await Users.findAll();
-    console.log("All users:", JSON.stringify(users, null, 2));
-    res.send(users)
-  } catch(err) {
+    res.send(users);
+    console.log("✅ all users sent to frontend");
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message: "An error occurred while fetching all users."});
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching all users." });
   }
 };
 
 // @desc   Update user data
-// @route  POST /updateUser/:userId
+// @route  POST /updateUser
 // @access Private
 const updateUserData = async (req, res) => {
-  let userId = req.params.userId;
   const updatedUser = {
-    email: req.body.email,
     fName: req.body.fName,
     lName: req.body.lName,
-    gender: req.body.gender
+    gender: req.body.gender,
+    age: req.body.age,
+    bio: req.body.bio,
+    year: req.body.year,
+    major: req.body.major,
+    cleanliness: req.body.cleanliness,
+    guests: req.body.guests,
+    timeInRoom: req.body.timeInRoom,
+    noise: req.body.noise,
+    pets: req.body.pets,
+    earlyBird: req.body.earlyBird
   };
 
-  try{
-    await Users.update(
-      updatedUser,
-      {
-        where: {id: userId}
-      }
-    );
+  try {
+    await Users.update(updatedUser, {
+      where: { email: req.body.email },
+    });
+    
     res.send("Field updated");
     console.log("Field successfully updated.");
-  }
-  catch(err){
+  } catch (err) {
     console.error(err);
-    res.status(500).json({message: "An error occurred while updating this field."});
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating this field." });
+  }
+};
+
+// @desc   Checks if a user has completed their preferences
+// @route  POST /userCompletedPreferences
+// @access Private
+const userCompletedPreferences = async (req, res) => {
+  try {
+    console.log("Checking user")
+    const user = await Users.findOne({
+      where: {
+        email: req.body.email
+      },
+    });
+    if (!user) {
+      console.log("❌ user was not found in db");
+      res.status(500).json({ error: "user was not found in database" });
+    }
+    let prefs = ["email", "cleanliness", "guests", "timeInRoom", "noise", "pets", "earlyBird"];
+    let hasProps = true;
+    
+    prefs.forEach(preference => {
+      hasProps = hasProps && user.dataValues.hasOwnProperty(preference) && user.dataValues[preference] != null;
+    });
+
+    console.log("preferences checked, completed: ", hasProps);
+    res.send(hasProps);
+    console.log("✅ user completion status sent to frontend");
+
+  } catch (err) {
+    console.log("❌ error checking user:", err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while checking this user." });
   }
 }
 
+// @desc   Get all of a user's messages, sorted by most recent
+// @route  GET /getAllMessages
+// @access Private
+const getAllMessages = async (req, res) => {
+  try {
+    const unreadMessages = await Messages.findAll({
+      where: {
+        senderEmail: req.body.senderEmail,
+        read: false
+      },
+      order: [
+        ['updatedAt', 'DESC']
+      ]
+    });
+    res.send(messages);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching all unread messages." });
+  }
+};
+
+// @desc   Adds a message to the table
+// @route  POST /addMessage
+// @access Public
+const addMessage = async (req, res) => {
+  try {
+    const message = {
+      senderEmail: req.body.senderEmail,
+      receiverEmail: req.body.receiverEmail,
+      content: req.body.conten,
+      read: false
+    };
+
+    await Messages.create(message);
+    res.status(200).json({ message: "User message added succesfully" });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding user preferences." });
+  }
+};
+
 module.exports = {
-    registerUser,
-    loginUser,
-    deleteUser,
-    getUser,
-    updateUserData,
-    getAllUsers,
-}
+  registerUser,
+  loginUser,
+  updateUserData,
+  deleteUser,
+  deleteAllUsers,
+  getUser,
+  getAllUsers,
+  userCompletedPreferences,
+  getAllMessages,
+  addMessage
+};

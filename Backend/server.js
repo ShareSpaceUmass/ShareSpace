@@ -1,16 +1,18 @@
 const express = require("express");
 const mysql = require("mysql2");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const { getUser } = require("./controllers/userController");
-const dotenv = require('dotenv').config();
+const { Users } = require("./models");
+const dotenv = require("dotenv").config();
 const app = express();
-const port = '3000';
-const db = require('./models');
+const port = "3000";
+const db = require("./models");
+const cache = require("./utils/cache");
 
 app.use(express.json());
 app.use(cors());
-
+app.use(express.urlencoded({ extended: false }));
 
 // Connect
 // const db = mysql.createConnection({
@@ -19,7 +21,6 @@ app.use(cors());
 //   password: '',
 //   database: 'userDatabase'
 // });
-
 
 // db.connect((err) => {
 //   if (err) {
@@ -31,85 +32,53 @@ app.use(cors());
 //     console.log(`Example app listening on port ${port}`);
 // });
 
-db.sequelize.sync({alter: true}).then(() => {
+// Create database
+// app.post("/createDatabase", (req, res) => {
+//   let sql = 'CREATE DATABASE userDatabase';
+//   db.query(sql, (err, result) => {
+//     if(err) return console.error('error: ' + err.message);
+//     console.log(result);
+//     res.send("Database created!");
+//   })
+// });
+
+db.sequelize.sync({ alter: true, logging: false }).then(() => {
   app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
-  })
-})
+    console.log(`Server running on port ${port}`);
+  });
+});
 
 // All user routes contained in /routes/userRoutes
-app.use('/users', require('./routes/userRoutes'))
+app.use("/users", require("./routes/userRoutes"));
 
-// Create database
-app.post("/createDatabase", (req, res) => {
-  let sql = 'CREATE DATABASE userDatabase';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("Database created!");
-  })
+app.get("/", (req, res) => {
+  res.send("Home");
 });
-
-// Create users table
-app.post('/createUserTable', (req, res) => {
-  let sql = 'CREATE TABLE users(id INT Primary KEY AUTO_INCREMENT, email VARCHAR(255), \
-  fName CHAR(255), lName CHAR(255), gender CHAR(20), age int, bio VARCHAR(255))';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("users table created!");
-  });
-});
-
-// Delete users table
-app.post('/deleteUserTable', (req, res) => {
-  let sql = 'DROP TABLE users';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("users table deleted!");
-  });
-});
-
-// Create messages table
-app.post('/createMessageTable', (req, res) => {
-  let sql = 'CREATE TABLE messages(id INT Primary KEY AUTO_INCREMENT, sender CHAR(20), receiver CHAR(20), content VARCHAR(255))';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("messages table created!");
-  });
-});
-
-// Delete messages table
-app.post('/deleteMessageTable', (req, res) => {
-  let sql = 'DROP TABLE messages';
-  db.query(sql, (err, result) => {
-    if(err) return console.error('error: ' + err.message);
-    console.log(result);
-    res.send("messages table deleted!");
-  });
-});
-
-app.get('/', (req,res) => {
-  res.send("Home")
-})
 
 // Verifies token given in URL
-app.get("/verify", (req, res) => {
+app.get("/verify", async (req, res) => {
+  console.log("Verifying login from email...");
   const token = req.query.token;
-  if(token == null) res.sendStatus(401);
-  try{
+  if (token == null) res.sendStatus(401);
+
+  cache.set(token, true);
+  console.log(`${req.query.email} clicked thier login link`);
+  try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    let user;
-    getUser(decodedToken, user);
-    res.send(`Authed as ${user}`)
-  }
-  catch(e){
+    console.log("token decoded:", decodedToken);
+    const user = await Users.findOne({
+      where: {
+        email: decodedToken.email,
+      },
+    });
+    console.log("✅ User verified:", user.email);
+    cache.set("token", decodedToken, 10000)
+    res.send(`Authed as ${user.email}. You can close this page and continue back to the login page.`);
+  } catch (e) {
+    console.log("❌ ERROR: verifying login form email", e);
     res.sendStatus(401);
   }
-  
+  window.close();
 });
 
-
-module.exports = db; 
+module.exports = db;

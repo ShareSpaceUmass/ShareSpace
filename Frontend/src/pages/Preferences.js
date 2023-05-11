@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import Lottie from "lottie-react";
 import preferencesAnim from "../assets/preferences-anim.json";
 import Aos from 'aos';
+import Header2 from "../components/Header2";
 
 
 const basicPreferences = [
@@ -106,7 +107,7 @@ const preferenceList = basicPreferences.map((preference) => {
                     })}
                 </RadioGroup>
             </FormControl>
-        </Box>
+            </Box>
     )
 }
 )
@@ -149,6 +150,8 @@ const interestList = interests.map((interest) => {
 function PreferencePage() {
     Aos.init({ duration: 1800, offset: 0 });
     return (
+        <div>
+            <Header2 />
         <Box
             display="flex"
             justifyContent="center"
@@ -236,7 +239,8 @@ function PreferencePage() {
                     </Button>
                 </Stack>
             </Stack>
-        </Box>
+            </Box>
+        </div>
     )
 }
 

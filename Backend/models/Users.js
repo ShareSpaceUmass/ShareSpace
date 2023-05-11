@@ -27,6 +27,30 @@ module.exports = (sequelize, DataTypes) => {
         bio: {
             type: DataTypes.CHAR(255),
         },
+        year: {
+            type: DataTypes.CHAR(255),
+        },
+        major: {
+            type: DataTypes.CHAR(255),
+        },
+        cleanliness: {
+            type: DataTypes.INTEGER,
+        },
+        guests: {
+            type: DataTypes.INTEGER,
+        },
+        timeInRoom:{
+            type: DataTypes.INTEGER,
+        },
+        noise:{
+            type: DataTypes.INTEGER,
+        },
+        pets:{
+            type: DataTypes.BOOLEAN,
+        },
+        earlyBird:{
+            type: DataTypes.BOOLEAN,
+        }
 
     });
 
