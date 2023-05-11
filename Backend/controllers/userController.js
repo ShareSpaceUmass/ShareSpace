@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { Users, Messages, Preferences } = require("../models");
+const { Users, Messages } = require("../models");
 const dotenv = require("dotenv").config();
 const { sendMagicLinkEmail } = require("../middleware/sendLink");
 const crypto = require("crypto");
@@ -132,8 +132,6 @@ const deleteAllUsers = async (req, res) => {
 // @access Private
 const getUser = async (req, res) => {
   try {
-    //TODO:
-    //Figure out how to join these 2 tables
     console.log("Checking user")
     const user = await Users.findOne({
       where: {
@@ -193,22 +191,8 @@ const updateUserData = async (req, res) => {
     earlyBird: req.body.earlyBird
   };
 
-  const updatedPreference = {
-    cleanliness: req.body.prefCleanliness,
-    guests: req.body.prefGuests,
-    timeInRoom: req.body.prefTimeInRoom,
-    noise: req.body.prefNoise,
-    pets: req.body.prefPets,
-    earlyBird: req.body.prefEarlyBird,
-    drugs: req.body.prefDrugs
-  };
-  
   try {
     await Users.update(updatedUser, {
-      where: { email: req.body.email },
-    });
-
-    await Preferences.update(updatedPreference, {
       where: { email: req.body.email },
     });
     
@@ -219,33 +203,6 @@ const updateUserData = async (req, res) => {
     res
       .status(500)
       .json({ message: "An error occurred while updating this field." });
-  }
-};
-
-
-// @desc   Adds a user's preferences
-// @route  POST /addUserPreferences
-// @access Public
-const addUserPreferences = async (req, res) => {
-  try {
-    const preference = {
-      email: req.body.email,
-      cleanliness: req.body.cleanliness,
-      guests: req.body.cleanliness,
-      timeInRoom: req.body.timeInRoom,
-      noise: req.body.noise,
-      pets: req.body.pets,
-      earlyBird: req.body.earlyBird,
-      drugs: req.body.drugs
-    };
-
-    await Preferences.create(preference);
-    res.status(200).json({ message: "User preferences added succesfully" });
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while adding user preferences." });
   }
 };
 
@@ -319,7 +276,7 @@ const addMessage = async (req, res) => {
     };
 
     await Messages.create(message);
-    res.status(200).json({ message: "User preferences added succesfully" });
+    res.status(200).json({ message: "User message added succesfully" });
   } catch (err) {
     console.error(err);
     res
@@ -336,7 +293,6 @@ module.exports = {
   deleteAllUsers,
   getUser,
   getAllUsers,
-  addUserPreferences,
   userCompletedPreferences,
   getAllMessages,
   addMessage
