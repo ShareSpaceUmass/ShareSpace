@@ -240,51 +240,6 @@ const userCompletedPreferences = async (req, res) => {
   }
 }
 
-// @desc   Get all of a user's messages, sorted by most recent
-// @route  GET /getAllMessages
-// @access Private
-const getAllMessages = async (req, res) => {
-  try {
-    const unreadMessages = await Messages.findAll({
-      where: {
-        senderEmail: req.body.senderEmail,
-        read: false
-      },
-      order: [
-        ['updatedAt', 'DESC']
-      ]
-    });
-    res.send(messages);
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching all unread messages." });
-  }
-};
-
-// @desc   Adds a message to the table
-// @route  POST /addMessage
-// @access Public
-const addMessage = async (req, res) => {
-  try {
-    const message = {
-      senderEmail: req.body.senderEmail,
-      receiverEmail: req.body.receiverEmail,
-      content: req.body.conten,
-      read: false
-    };
-
-    await Messages.create(message);
-    res.status(200).json({ message: "User message added succesfully" });
-  } catch (err) {
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while adding user preferences." });
-  }
-};
-
 module.exports = {
   registerUser,
   loginUser,
@@ -293,7 +248,5 @@ module.exports = {
   deleteAllUsers,
   getUser,
   getAllUsers,
-  userCompletedPreferences,
-  getAllMessages,
-  addMessage
+  userCompletedPreferences
 };

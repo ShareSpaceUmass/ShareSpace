@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser, updateUserData, deleteUser, deleteAllUsers, getUser, getAllUsers, userCompletedPreferences, getAllMessages, addMessage } = require('../controllers/userController')
+const { registerUser, loginUser, updateUserData, deleteUser, deleteAllUsers, getUser, getAllUsers, userCompletedPreferences } = require('../controllers/userController')
 
 const multer = require('multer'); 
 
@@ -15,8 +15,7 @@ router.delete('/deleteAllUsers', deleteAllUsers);
 router.post('/getUser', getUser);
 router.get('/getAllUsers', getAllUsers);
 router.get('/userCompletedPreferences', userCompletedPreferences);
-router.get('/getAllMessages', getAllMessages);
-router.post('/addMessage', addMessage);
+
 
 
 module.exports = router;
