@@ -27,12 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         bio: {
             type: DataTypes.CHAR(255),
         },
-        profilePic:{
-            type: DataTypes.CHAR(255),
-        },
-        imageUrl:{
-            type: DataTypes.TEXT,
-        },
         year: {
             type: DataTypes.CHAR(255),
         },

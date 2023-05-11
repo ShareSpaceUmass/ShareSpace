@@ -13,15 +13,6 @@ const {
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const e = require("express");
 
-Users.hasOne(Preferences);
-Preferences.belongsTo(Users);
-
-Users.hasMany(Messages);
-Messages.belongsTo(Users);
-
-const randomImageName = (bytes = 32) =>
-  crypto.randomBytes(bytes).toString("hex");
-
 const bucketName = process.env.BUCKET_NAME;
 const bucketRegion = process.env.BUCKET_REGION;
 const accessKey = process.env.ACCESS_KEY;
@@ -186,8 +177,6 @@ const getAllUsers = async (req, res) => {
 // @route  POST /updateUser
 // @access Private
 const updateUserData = async (req, res) => {
-  let changedPfp = req.body.changedPfp;
-
   const updatedUser = {
     fName: req.body.fName,
     lName: req.body.lName,
@@ -214,23 +203,6 @@ const updateUserData = async (req, res) => {
     drugs: req.body.prefDrugs
   };
   
-  if (changedPfp) {
-    const imageName = randomImageName();
-    //resize image
-    const buffer = await sharp(req.file.buffer)
-      .resize({ height: 1920, width: 1080, fit: "contain" })
-      .toBuffer();
-    const params = {
-      Bucket: bucketName,
-      Key: imageName,
-      Body: buffer,
-      ContentType: req.file.mimetype,
-    };
-    const postCommand = new PutObjectCommand(params);
-    await s3.send(postCommand);
-    updatedUser.profilePic = imageName;
-  }
-
   try {
     await Users.update(updatedUser, {
       where: { email: req.body.email },
