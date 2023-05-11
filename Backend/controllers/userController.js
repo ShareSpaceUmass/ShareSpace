@@ -277,6 +277,40 @@ const addUserPreferences = async (req, res) => {
   }
 };
 
+// @desc   Checks if a user has completed their preferences
+// @route  POST /userCompletedPreferences
+// @access Private
+const userCompletedPreferences = async (req, res) => {
+  try {
+    console.log("Checking user")
+    const user = await Users.findOne({
+      where: {
+        email: req.body.email
+      },
+    });
+    if (!user) {
+      console.log("❌ user was not found in db");
+      res.status(500).json({ error: "user was not found in database" });
+    }
+    let prefs = ["email", "cleanliness", "guests", "timeInRoom", "noise", "pets", "earlyBird"];
+    let hasProps = true;
+    
+    prefs.forEach(preference => {
+      hasProps = hasProps && user.dataValues.hasOwnProperty(preference) && user.dataValues[preference] != null;
+    });
+
+    console.log("preferences checked, completed: ", hasProps);
+    res.send(hasProps);
+    console.log("✅ user completion status sent to frontend");
+
+  } catch (err) {
+    console.log("❌ error checking user:", err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while checking this user." });
+  }
+}
+
 // @desc   Get all of a user's messages, sorted by most recent
 // @route  GET /getAllMessages
 // @access Private
@@ -331,6 +365,7 @@ module.exports = {
   getUser,
   getAllUsers,
   addUserPreferences,
+  userCompletedPreferences,
   getAllMessages,
   addMessage
 };
