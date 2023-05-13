@@ -185,10 +185,11 @@ const updateUserData = async (req, res) => {
     major: req.body.major,
     cleanliness: req.body.cleanliness,
     guests: req.body.guests,
-    timeInRoom: req.body.timeInRoom,
+    inRoom: req.body.inRoom,
     noise: req.body.noise,
     pets: req.body.pets,
-    earlyBird: req.body.earlyBird
+    earlyBird: req.body.earlyBird,
+    closeness: req.body.closeness
   };
 
   try {

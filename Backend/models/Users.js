@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         guests: {
             type: DataTypes.INTEGER,
         },
-        timeInRoom:{
+        inRoom:{
             type: DataTypes.INTEGER,
         },
         noise:{
@@ -50,8 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         earlyBird:{
             type: DataTypes.BOOLEAN,
+        },
+        closeness:{
+            type: DataTypes.CHAR(255)
         }
-
     });
 
     return Users;
