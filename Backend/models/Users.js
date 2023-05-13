@@ -1,3 +1,5 @@
+// Export a Sequelize model for the 'Users' table
+// The model represents a table in a MySQL database, which will contain user data
 module.exports = (sequelize, DataTypes) => {
     const Users = sequelize.define("Users", {
         id: {
@@ -55,6 +57,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.CHAR(255)
         }
     });
-
+    // Return the 'Users' model for use in other parts of the application
     return Users;
 }

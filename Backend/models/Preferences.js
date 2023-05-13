@@ -1,3 +1,5 @@
+// Export a Sequelize model for the 'Preferences' table
+// The model represents a table in a MySQL database, which will contain user preference data
 module.exports = (sequelize, DataTypes) => {
     const Preferences = sequelize.define("Preferences", {
         preferenceID: {
@@ -32,5 +34,6 @@ module.exports = (sequelize, DataTypes) => {
         
     });
 
+    // Return the 'Preferences' model for use in other parts of the application
     return Preferences;
 }

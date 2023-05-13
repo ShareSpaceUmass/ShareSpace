@@ -1,84 +1,59 @@
-const express = require("express");
-const mysql = require("mysql2");
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const { getUser } = require("./controllers/userController");
-const { Users } = require("./models");
-const dotenv = require("dotenv").config();
-const app = express();
-const port = "3000";
-const db = require("./models");
-const cache = require("./utils/cache");
+// Import required dependencies
+const express = require("express"); // Web framework for Node.js
+const mysql = require("mysql2"); // MySQL database driver
+const jwt = require("jsonwebtoken"); // JSON Web Token library
+const cors = require("cors"); // Cross-origin resource sharing middleware
+const { getUser } = require("./controllers/userController"); // Import user controller
+const { Users } = require("./models"); // Import Sequelize User model
+const dotenv = require("dotenv").config(); // Load environment variables
+const app = express(); // Create Express app instance
+const port = "3000"; // Port number
+const db = require("./models"); // Sequelize database connection
+const cache = require("./utils/cache"); // Import cache module
 
-app.use(express.json());
-app.use(cors());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json()); // Parse request bodies as JSON
+app.use(cors()); // Enable cross-origin resource sharing
+app.use(express.urlencoded({ extended: false })); // Parse URL-encoded request bodies
 
-// Connect
-// const db = mysql.createConnection({
-//   host: 'sharespace-db.caerbupd5wj1.us-east-2.rds.amazonaws.com',
-//   user: 'admin',
-//   password: '',
-//   database: 'userDatabase'
-// });
-
-// db.connect((err) => {
-//   if (err) {
-//     return console.error('error: ' + err.message);
-//   }
-//   console.log('Connected to the MySQL server.');
-// });
-// app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`);
-// });
-
-// Create database
-// app.post("/createDatabase", (req, res) => {
-//   let sql = 'CREATE DATABASE userDatabase';
-//   db.query(sql, (err, result) => {
-//     if(err) return console.error('error: ' + err.message);
-//     console.log(result);
-//     res.send("Database created!");
-//   })
-// });
-
+// Sync the Sequelize object relational mapping (ORM) model with the database and start the server
 db.sequelize.sync({ alter: true, logging: false }).then(() => {
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
 });
 
-// All user routes contained in /routes/userRoutes
+// All user routes are contained in /routes/userRoutes and are used in use user-related requests
 app.use("/users", require("./routes/userRoutes"));
 
+// Define route for root path
 app.get("/", (req, res) => {
-  res.send("Home");
+  res.send("Home"); // Send a response with "Home" message
 });
 
 // Verifies token given in URL
 app.get("/verify", async (req, res) => {
-  console.log("Verifying login from email...");
-  const token = req.query.token;
-  if (token == null) res.sendStatus(401);
+  console.log("Verifying login from email..."); // Log message for verifying login
+  const token = req.query.token; // Retrieve token from the query parameter
+  if (token == null) res.sendStatus(401); // Send 401 error if no token is provided
 
-  cache.set(token, true);
-  console.log(`${req.query.email} clicked thier login link`);
+  cache.set(token, true); // Cache the token
+  console.log(`${req.query.email} clicked thier login link`); // Log message for login link click
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("token decoded:", decodedToken);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify the token using the JWT_SECRET environment variable
+    console.log("token decoded:", decodedToken); // Log message for decoded token
     const user = await Users.findOne({
       where: {
-        email: decodedToken.email,
+        email: decodedToken.email, // Look up the user by email address
       },
     });
-    console.log("✅ User verified:", user.email);
-    cache.set("token", decodedToken, 10000)
-    res.send(`Authed as ${user.email}. You can close this page and continue back to the login page.`);
+    console.log("✅ User verified:", user.email); // Log message for verified user
+    cache.set("token", decodedToken, 10000) // Cache the decoded token
+    res.send(`Authed as ${user.email}. You can close this page and continue back to the login page.`); // Send response with authenticated user email message
   } catch (e) {
-    console.log("❌ ERROR: verifying login form email", e);
-    res.sendStatus(401);
+    console.log("❌ ERROR: verifying login form email", e); // Log error for login verification
+    res.sendStatus(401); // Send 401 error if verification fails
   }
-  window.close();
+  window.close(); // Close window
 });
 
-module.exports = db;
+module.exports = db; // Export the Sequelize database connection for external use.
