@@ -7,7 +7,7 @@ function sendMagicLinkEmail(email, token) {
       to: email,
       from: process.env.FROM_EMAIL,
       subject: "Finish Logging In",
-      html: `<a href = "http://localhost:3000/verify?token=${token}">Log in</a>`,
+      html: `<a href = "http://localhost:3000/verify?token=${token}">Log in</a>`, // Change API
     })
   }
 

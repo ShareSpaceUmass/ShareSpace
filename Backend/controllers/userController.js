@@ -33,7 +33,7 @@ const registerUser = async (req,res) => {
     const checkExistingEmail = await Users.findOne({where: {email: req.body.email}});
     if(checkExistingEmail)
       res.status(500).json({message: "Email is already registered."});
-    else{
+    else {
       const user = {
         email: req.body.email,
         fName: req.body.fName,
@@ -55,22 +55,22 @@ const registerUser = async (req,res) => {
 // @route  POST /users/login
 // @access Public
 const loginUser = async (req, res) => {
-  let user;
-  getUser(req.body.email, user)
+  const user = await Users.findOne({where: {email: req.body}});
+
   if (user != null) {
     try {
-      const token = jwt.sign({userId: req.body.email}, process.env.JWT_SECRET, {
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       })
-      await sendMagicLinkEmail(req.body.email, token)
+      await sendMagicLinkEmail(req.body, token)
     } catch (e) {
       console.log(e)
-      return res.json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
+      return res.status(300).json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
                                                             //json with this message up the chain
     }
   }
 
-  res.json("Email not registered")
+  res.status(500).send("Login Failed: email not registered")
 }
 
 // @desc   Delete an existing user
