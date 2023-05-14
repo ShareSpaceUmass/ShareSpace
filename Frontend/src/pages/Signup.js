@@ -2,6 +2,7 @@ import * as React from 'react';
 import { InputLabel, MenuItem, FormControl, Box, Stack, Typography, Button, TextField, Grid, Select, Alert, AlertTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png';
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
 import Aos from 'aos';
 
 function SignupPage() {
@@ -39,26 +40,26 @@ function SignupPage() {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
   }
 
-  const register = async() => {
+  const register = async () => {
     const user = { fName, lName, email, gender }
-    const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
-    const users = await userData.json()
-    if (users.some(e => e.email === email)) {
-      setUsedEmail(true)
-    }
-    else {
-      const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-      })
-      response.then((res) => res.json())
-        .then((data) => console.log(data))
-      window.location.href = "/preferences"
-    }
+
+    const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    response.then((res) => {
+      if (res.status === 500) {
+        setUsedEmail(true)
+      }
+      else {
+        window.location.href = "/quiz"
+      }
+    })
   }
+
 
   Aos.init({ duration: 1800, offset: 0 });
   return (
@@ -74,17 +75,19 @@ function SignupPage() {
           justifyContent="center"
           alignItems="center"
         >
-          <Box
-            component="img"
-            sx={{
-              height: 500,
-              width: 700,
-              maxHeight: { xs: 100, md: 200 },
-              maxWidth: { xs: 250, md: 491 },
-            }}
-            alt="ShareSpaceLogo"
-            src={logo}
-          />
+          <Link to="/">
+            <Box
+              component="img"
+              sx={{
+                height: 500,
+                width: 700,
+                maxHeight: { xs: 100, md: 200 },
+                maxWidth: { xs: 250, md: 491 },
+              }}
+              alt="ShareSpaceLogo"
+              src={logo}
+            />
+          </Link>
           <Typography sx={{ typography: { md: 'h3', sm: 'body1' } }}>Ready to Find a Roommate?</Typography>
         </Stack>
       </Box>
@@ -223,7 +226,7 @@ function SignupPage() {
             variant="contained"
             color="secondary"
             href="/login"
-            sx={{width:250}}
+            sx={{ width: 250 }}
           >Login
           </Button>
         </Stack>

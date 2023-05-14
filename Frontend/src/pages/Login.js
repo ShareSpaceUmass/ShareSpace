@@ -1,7 +1,10 @@
 import * as React from 'react';
-import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle } from '@mui/material';
+import { Box, Stack, Typography, Button, TextField, Alert, AlertTitle, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import logo from '../public/images/ShareSpaceLogo.png'
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie';
+
 import Aos from 'aos';
 
 function emailError(error) {
@@ -20,10 +23,13 @@ function emailError(error) {
     }
 }
 
+
 function LoginPage() {
     const [email, setEmail] = useState('')
     const [validEmail, setValidEmail] = useState(false)
     const [usedEmail, setUsedEmail] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [cookies, setCookie] = useCookies(['name']);
 
     //Verifies input ends with @umass.edu
     const checkEmail = (input) => {
@@ -34,28 +40,58 @@ function LoginPage() {
 
     //Click handler for login button. Sends email as json object to the backend using FETCH api
     const handleClick = async () => {
-        const userData = await fetch(process.env.REACT_APP_SERVER_URL+"/users/getAllUsers/")
-        const users = await userData.json()
-        console.log(users.some(e => e.email === email))
-        if (!users.some(e => e.email === email)) {
-            setUsedEmail(true)
-        }
-        else {
-            const emailJson = { email }
+        const emailJson = { email }
 
-            const response = fetch(process.env.REACT_APP_SERVER_URL+"/users/login/", {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(emailJson)
+        //Checks if email is a registered email
+        
+        const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: simpleStringify(emailJson)
+        })
+        response.then((res) => {
+            if (res.status === 500) {
+                setUsedEmail(true)
+            } else {
+                console.log("Email is registered")
+                setOpen(true)
+            }
+        })
+        
+
+        if (usedEmail === false) {
+        const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: simpleStringify(emailJson)
+        })
+        sendEmail.then((res) => {
+            if (res.status === 200) {
+                console.log(res)
+                return res.json()
+            }
+            else {
+                setUsedEmail(true)
+            }
+        })
+            .then((response) => {
+                console.log(response)
+                setCookie('token', response.token, { path: '/' })
+                setCookie('email', email, { path: '/' })
+                window.location.href = "/quiz"
             })
-            response.then((res) => res.json())
-                .then((data) => console.log(data))
         }
     }
 
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     Aos.init({ duration: 1800, offset: 0 });
     return (
@@ -71,24 +107,26 @@ function LoginPage() {
                 alignItems="center"
                 marginTop={-10}
             >
-                <Box
-                    component="img"
-                    sx={{
-                        height: 500,
-                        width: 700,
-                        maxHeight: { xs: 100, md: 200 },
-                        maxWidth: { xs: 250, md: 491 },
-                    }}
-                    alt="ShareSpaceLogo"
-                    src={logo}
-                />
+                <Link to="/">
+                    <Box
+                        component="img"
+                        sx={{
+                            height: 500,
+                            width: 700,
+                            maxHeight: { xs: 100, md: 200 },
+                            maxWidth: { xs: 250, md: 491 },
+                        }}
+                        alt="ShareSpaceLogo"
+                        src={logo}
+                    />
+                </Link>
                 <Stack
                     spacing={2}
                     maxWidth="30vw"
 
                 >
                     <TextField
-                        error = {validEmail}
+                        error={validEmail}
                         id="email"
                         label="Email"
                         variant="outlined"
@@ -116,8 +154,46 @@ function LoginPage() {
                     >Register</Button>
                 </Stack>
             </Stack>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"In order to complete your sign in, we just need you to verify your email address."}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        We've sent a verification email to the email address you provided. Please check your inbox (and spam folder, just in case) and click on the verification link to confirm your email address.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
+
+function simpleStringify(object) {
+    // stringify an object, avoiding circular structures
+    // https://stackoverflow.com/a/31557814
+    var simpleObject = {};
+    for (var prop in object) {
+        if (!object.hasOwnProperty(prop)) {
+            continue;
+        }
+        if (typeof (object[prop]) == 'object') {
+            continue;
+        }
+        if (typeof (object[prop]) == 'function') {
+            continue;
+        }
+        simpleObject[prop] = object[prop];
+    }
+    return JSON.stringify(simpleObject); // returns cleaned up JSON
+};
+
 
 export default LoginPage

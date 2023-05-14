@@ -1,3 +1,5 @@
+// Export a Sequelize model for the 'Messages' table
+// The model represents a table in a MySQL database, which will contain messages data
 module.exports = (sequelize, DataTypes) => {
     const Messages = sequelize.define("Messages", {
         messageID: {
@@ -5,20 +7,21 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement : true
         },
-        userID:{
-            type: DataTypes.INTEGER
+        senderEmail:{
+            type: DataTypes.CHAR(255)
         },
-        receiverID:{
+        receiverEmail:{
             type: DataTypes.INTEGER
         },
         content:{
-            type: DataTypes.CHAR(255)
+            type: DataTypes.TEXT
         },
-        timeSent:{
-            type: DataTypes.INTEGER
+        read:{
+            type: DataTypes.BOOLEAN
         }
 
     });
 
+    // Return the 'Messages' model for use in other parts of the application
     return Messages;
 }
