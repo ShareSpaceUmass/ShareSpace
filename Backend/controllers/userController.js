@@ -266,55 +266,9 @@ const userCompletedPreferences = async (req, res) => {
   }
 }
 
-// @desc   Get all of a user's messages, sorted by most recent
-// @route  GET /getAllMessages
-// @access Private
-const getAllMessages = async (req, res) => {
-  // Find all unread messages sent by the specified senderEmail and sort them by most recent
-  try {
-    const unreadMessages = await Messages.findAll({
-      where: {
-        senderEmail: req.body.senderEmail,
-        read: false
-      },
-      order: [
-        ['updatedAt', 'DESC']
-      ]
-    });
-    // Send all unread messages to the client
-    res.send(messages);
-  } catch (err) {
-    // Handle any errors that occur while retrieving messages
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching all unread messages." });
-  }
-};
 
-// @desc   Adds a message to the table
-// @route  POST /addMessage
-// @access Public
-const addMessage = async (req, res) => {
-  try {
-    // Create a new message with the specified properties
-    const message = {
-      senderEmail: req.body.senderEmail,
-      receiverEmail: req.body.receiverEmail,
-      content: req.body.conten,
-      read: false
-    };
-    // Add the new message to the database
-    await Messages.create(message);
-    res.status(200).json({ message: "User message added succesfully" });
-  } catch (err) {
-    // Handle any errors that occur while adding the new message to the database
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while adding user preferences." });
-  }
-};
+
+
 
 // Exporting an object with all the defined functions as properties to make them available to other modules
 module.exports = {
@@ -325,7 +279,5 @@ module.exports = {
   deleteAllUsers,
   getUser,
   getAllUsers,
-  userCompletedPreferences,
-  getAllMessages,
-  addMessage
+  userCompletedPreferences
 };

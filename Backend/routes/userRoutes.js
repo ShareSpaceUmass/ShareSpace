@@ -1,7 +1,8 @@
+
 // Import required dependencies
 const express = require('express'); // Web framework for Node.js
 const router = express.Router(); // Creates an instance of an Express Router
-const { registerUser, loginUser, updateUserData, deleteUser, deleteAllUsers, getUser, getAllUsers, userCompletedPreferences, getAllMessages, addMessage } = require('../controllers/userController') // Import user controller functions
+const { registerUser, loginUser, updateUserData, deleteUser, deleteAllUsers, getUser, getAllUsers, userCompletedPreferences } = require('../controllers/userController') // Import user controller functions
 
 const multer = require('multer'); // Multer middleware for handling multipart/form-data
 const storage = multer.memoryStorage() // Create memory storage engine to store files as Buffer objects
@@ -16,7 +17,6 @@ router.delete('/deleteAllUsers', deleteAllUsers); // Route to delete all user ac
 router.post('/getUser', getUser); // Route to get a user's information
 router.get('/getAllUsers', getAllUsers); // Route to get information on all users
 router.get('/userCompletedPreferences', userCompletedPreferences); // Route to get checks if a user has completed their preferences
-router.get('/getAllMessages', getAllMessages); // Route to get all messages
-router.post('/addMessage', addMessage); // Route to add a new message
+
 
 module.exports = router; // Export the router instance for use in the main app.
