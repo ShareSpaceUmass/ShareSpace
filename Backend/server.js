@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-const express = require("express");
-const mysql = require("mysql2");
-const jwt = require("jsonwebtoken")
-const cors = require("cors");
-const { getUser } = require("./controllers/userController");
-const dotenv = require('dotenv').config();
-const app = express();
-const port = '3000';
-const db = require('./models');
-const User = require('./models');
-
-app.use(express.json());
-app.use(cors());
-app.use(express.urlencoded({extended: false}));
-
-
-
-db.sequelize.sync({alter: true}).then(() => {
-=======
 // Import required dependencies
 const express = require("express"); // Web framework for Node.js
 const mysql = require("mysql2"); // MySQL database driver
@@ -37,7 +17,6 @@ app.use(express.urlencoded({ extended: false })); // Parse URL-encoded request b
 
 // Sync the Sequelize object relational mapping (ORM) model with the database and start the server
 db.sequelize.sync({ alter: true, logging: false }).then(() => {
->>>>>>> e85ca66fabe24a2ad853ed42a1e1d37c7e6dc66e
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);
   });
@@ -53,15 +32,6 @@ app.get("/", (req, res) => {
 
 // Verifies token given in URL
 app.get("/verify", async (req, res) => {
-<<<<<<< HEAD
-  const token = req.query.token;
-  if(token == null) res.sendStatus(401);
-
-  try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ where: { id: decodedToken.id }});
-    res.status(200).send(`Authed as ${user.fName}`)
-=======
   console.log("Verifying login from email..."); // Log message for verifying login
   const token = req.query.token; // Retrieve token from the query parameter
   if (token == null) res.sendStatus(401); // Send 401 error if no token is provided
@@ -82,7 +52,6 @@ app.get("/verify", async (req, res) => {
   } catch (e) {
     console.log("❌ ERROR: verifying login form email", e); // Log error for login verification
     res.sendStatus(401); // Send 401 error if verification fails
->>>>>>> e85ca66fabe24a2ad853ed42a1e1d37c7e6dc66e
   }
   window.close(); // Close window
 });

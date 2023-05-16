@@ -35,12 +35,6 @@ const s3 = new S3Client({
 // @access Public
 const registerUser = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const checkExistingEmail = await Users.findOne({where: {email: req.body.email}});
-    if(checkExistingEmail)
-      res.status(500).json({message: "Email is already registered."});
-    else {
-=======
     // check if the email is already registered
     const checkExistingEmail = await Users.findOne({
       where: { email: req.body.email },
@@ -49,7 +43,6 @@ const registerUser = async (req, res) => {
       res.status(500).json({ message: "Email is already registered." });
     else {
       // create a new user object
->>>>>>> e85ca66fabe24a2ad853ed42a1e1d37c7e6dc66e
       const user = {
         email: req.body.email,
         fName: req.body.fName,
@@ -72,25 +65,6 @@ const registerUser = async (req, res) => {
 // @route  POST /users/login
 // @access Public
 const loginUser = async (req, res) => {
-<<<<<<< HEAD
-  const user = await Users.findOne({where: {email: req.body}});
-
-  if (user != null) {
-    try {
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      })
-      await sendMagicLinkEmail(req.body, token)
-    } catch (e) {
-      console.log(e)
-      return res.status(300).json("Error logging in. Please try again") //not entirely sure how to connect to frontend, but I think we use this to send 
-                                                            //json with this message up the chain
-    }
-  }
-
-  res.status(500).send("Login Failed: email not registered")
-}
-=======
   console.log("logging in user...");
   try {
       // create a JWT token with the user's email and a secret key
@@ -128,7 +102,6 @@ const loginUser = async (req, res) => {
     }
   }
 
->>>>>>> e85ca66fabe24a2ad853ed42a1e1d37c7e6dc66e
 
 // @desc   Delete an existing user
 // @route  DELETE /users/deleteUser
