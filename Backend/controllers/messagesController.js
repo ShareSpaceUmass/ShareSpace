@@ -1,29 +1,28 @@
+// Import models for User and Message
 const { Users } = require('../models');
 const { Messages } = require('../models');
-const { Server } = require("socket.io");
 
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: "*"}});
-const dotenv = require('dotenv').config();
+const { Server } = require("socket.io"); // Importing Server class from the socket.io library
 
+const server = http.createServer(app); // Creating the HTTP server using the express app
+const io = new Server(server, { cors: { origin: "*"}}); // Creating the Socket.io server
+const dotenv = require('dotenv').config(); // import the dotenv library for loading environment variables from a .env file
 
+// Setting up a route for the home page and sending Chat.js file
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '../../Frontend/pages/Chat.js');
 });
   
-
-  
+// Starting the server and logging a message when server is started
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
 
 let userList = [] //stores logged in users
 
-
- // @desc Handles the connection event when a user connects to the server via socket.
+ // @desc Event listener for when a user connects to the Socket.io server
  //
  // @param socket - The socket object representing the connection.
-
 io.on('connection', (socket) => {
     //NOTE: incomplete implementation, need to integrate and test still
     console.log('a user connected');
@@ -87,48 +86,53 @@ const markRead = async (req,res) => {
 // @route  GET /getAllMessages
 // @access Private
 const getAllMessages = async (req, res) => {
-    try {
-      const unreadMessages = await Messages.findAll({
-        where: {
-          senderEmail: req.body.senderEmail,
-          read: false
-        },
-        order: [
-          ['updatedAt', 'DESC']
-        ]
-      });
-      res.send(messages);
-    } catch (err) {
-      console.error(err);
-      res
-        .status(500)
-        .json({ message: "An error occurred while fetching all unread messages." });
-    }
-  };
-  
-  // @desc   Adds a message to the table
-  // @route  POST /addMessage
-  // @access Public
-  const addMessage = async (req, res) => {
-    try {
-      const message = {
+  // Find all unread messages sent by the specified senderEmail and sort them by most recent
+  try {
+    const unreadMessages = await Messages.findAll({
+      where: {
         senderEmail: req.body.senderEmail,
-        receiverEmail: req.body.receiverEmail,
-        content: req.body.conten,
         read: false
-      };
+      },
+      order: [
+        ['updatedAt', 'DESC']
+      ]
+    });
+    // Send all unread messages to the client
+    res.send(messages);
+  } catch (err) {
+    // Handle any errors that occur while retrieving messages
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching all unread messages." });
+  }
+};
   
-      await Messages.create(message);
-      res.status(200).json({ message: "User message added succesfully" });
-    } catch (err) {
-      console.error(err);
-      res
-        .status(500)
-        .json({ message: "An error occurred while adding user preferences." });
-    }
-  };
+// @desc   Adds a message to the table
+// @route  POST /addMessage
+// @access Public
+const addMessage = async (req, res) => {
+  try {
+    // Create a new message with the specified properties
+    const message = {
+      senderEmail: req.body.senderEmail,
+      receiverEmail: req.body.receiverEmail,
+      content: req.body.conten,
+      read: false
+    };
+    // Add the new message to the database
+    await Messages.create(message);
+    res.status(200).json({ message: "User message added succesfully" });
+  } catch (err) {
+    // Handle any errors that occur while adding the new message to the database
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding user preferences." });
+  }
+};
 
-
+// Exporting an object with all the defined functions as properties to make them available to other modules
   module.exports = {
     markRead,
     getAllMessages,
