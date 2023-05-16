@@ -117,7 +117,7 @@ const addMessage = async (req, res) => {
     const message = {
       senderEmail: req.body.senderEmail,
       receiverEmail: req.body.receiverEmail,
-      content: req.body.conten,
+      content: req.body.content,
       read: false
     };
     // Add the new message to the database
