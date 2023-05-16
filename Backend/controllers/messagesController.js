@@ -17,7 +17,7 @@ server.listen(3000, () => {
     console.log('listening on *:3000');
 });
 
-let userList = []
+let userList = [] //stores logged in users
 
 
  // @desc Handles the connection event when a user connects to the server via socket.
@@ -25,9 +25,9 @@ let userList = []
  // @param socket - The socket object representing the connection.
 
 io.on('connection', (socket) => {
+    //NOTE: incomplete implementation, need to integrate and test still
     console.log('a user connected');
-    //TODO
-    let userEmail;
+    let userEmail = socket.handshake.auth.email;
     let history;
     getAllMessages(userEmail, history);
     
