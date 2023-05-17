@@ -15,7 +15,7 @@ Roommate Compatibility: ShareSpace's goal is to help you find the best match for
 
 mproved Mental Health: We firmly believe that a positive living environment contributes to overall mental well-being. ShareSpace seeks to mitigate difficult situations that may arise between students with contrasting beliefs or interests. By fostering compatibility and understanding, we aim to enhance the overall mental health and happiness of the student body.
 
-#How to Get Started
+## How to Get Started
 
 Sign Up: Visit our website and create an account with your UMass email. Rest assured, we prioritize data privacy and protect your personal information.
 
