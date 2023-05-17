@@ -33,7 +33,7 @@ After interacting with your potential roommates, it's time to decide whether you
 ### Enjoy a Great Living Experience: 
 With ShareSpace, you can look forward to a more compatible living arrangement that aligns with your preferences. By fostering positive connections, we strive to create an inclusive and supportive community within the UMass housing ecosystem. We hope you have a fantastic housing experience with ShareSpace!
 
-### Note
+## Note
 ShareSpace is an independent platform and is not affiliated with UMass Housing. We work in collaboration with UMass Housing to ensure compliance with university housing policies.
 
 ## Running the App
