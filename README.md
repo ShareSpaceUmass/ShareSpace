@@ -13,7 +13,7 @@ Seamless Interaction: Once connected with potential roommates, ShareSpace enable
 
 Roommate Compatibility: ShareSpace's goal is to help you find the best match for your next semester's living arrangement. By connecting with students who have similar beliefs and interests, we aim to reduce the likelihood of conflicts and create a more harmonious living environment.
 
-mproved Mental Health: We firmly believe that a positive living environment contributes to overall mental well-being. ShareSpace seeks to mitigate difficult situations that may arise between students with contrasting beliefs or interests. By fostering compatibility and understanding, we aim to enhance the overall mental health and happiness of the student body.
+Improved Mental Health: We firmly believe that a positive living environment contributes to overall mental well-being. ShareSpace seeks to mitigate difficult situations that may arise between students with contrasting beliefs or interests. By fostering compatibility and understanding, we aim to enhance the overall mental health and happiness of the student body.
 
 ## How to Get Started
 
