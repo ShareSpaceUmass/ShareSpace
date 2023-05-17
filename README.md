@@ -2,8 +2,10 @@
 ## About
 ShareSpace intends to be a  central  app  where  more  preferences are taken into consideration to upgrade the campus housing experience. We intend to work in tandem with UMass Housing to provide suitable matches for the students while adhering to university housing policies. The app will allow students to input their preferences in the form of an interactive survey and help connect them to students with matching interests, lifestyle choices. The connected students will then be able to interact with each other and decide whether they would like room together in the following semester. We believe that this can be used to mitigate difficult situations that might arise between students with heavily opposite beliefs and interests and in turn improve the overall mental health of the student body.
 
+## About
 Welcome to ShareSpace, your ultimate solution for enhancing the campus housing experience at UMass! ShareSpace is a central app designed to prioritize your preferences and create better matches for your housing needs, all while complying with the university's housing policies.
-Features
+
+## Features
 
 Preference-Based Matching: ShareSpace offers an interactive survey where you can input your preferences, interests, and lifestyle choices. We take into consideration a wide range of factors to connect you with like-minded students who share similar preferences and values.
 
