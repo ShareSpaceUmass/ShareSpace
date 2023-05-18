@@ -128,7 +128,7 @@ const addMessage = async (req, res) => {
     console.error(err);
     res
       .status(500)
-      .json({ message: "An error occurred while adding user preferences." });
+      .json({ message: "An error occurred while adding user message." });
   }
 };
 
