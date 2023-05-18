@@ -78,7 +78,7 @@ const markRead = async (req,res) => {
       console.error(err);
       res
         .status(500)
-        .json({ message: "An error occurred while fetching all unread messages." });
+        .json({ message: "An error occurred while marking message as read." });
     }
 }
   
