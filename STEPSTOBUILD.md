@@ -8,7 +8,7 @@
     
     FROM_EMAIL = 'auth.sharespace@gmail.com'
     
-    JWT_SECRET = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4MDUwMDE2MywiaWF0IjoxNjgwNTAwMTYzfQ.yif6FVu-LndY3GlFz40OvURwwWFPVWUr69sdKJqjwcA'`
+    JWT_SECRET = 'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY4MDUwMDE2MywiaWF0IjoxNjgwNTAwMTYzfQ.yif6FVu-LndY3GlFz40OvURwwWFPVWUr69sdKJqjwcA'
 ```
 2.	Create a config.json file in the Backend directory with the following inside.
     ```
