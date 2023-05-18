@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
         email: req.body.email,
         fName: req.body.fName,
         lName: req.body.lName,
-        gender: req.body.gender,
+        gender: req.body.gender
       };
       // add the new user to the database
       await Users.create(user);
