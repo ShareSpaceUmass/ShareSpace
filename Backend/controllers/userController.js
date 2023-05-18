@@ -85,7 +85,7 @@ const loginUser = async (req, res) => {
         // check if the user has clicked on the link by checking the cache
         const linkClicked = cache.get(req.body.email);
         cache.del(req.body.email)
-        if (linkClicked != undefined) {
+        if (linkClicked) {
           console.log("✅ link click has been detected");
           clearInterval(pollingInterval);
           res
