@@ -83,8 +83,9 @@ const loginUser = async (req, res) => {
       console.log(`waiting for ${req.body.email} to login via email`);
       let pollingInterval = setInterval(() => {
         // check if the user has clicked on the link by checking the cache
-        const linkClicked = cache.get(token);
-        if (linkClicked) {
+        const linkClicked = cache.get(req.body.email);
+        cache.del(req.body.email)
+        if (linkClicked != undefined) {
           console.log("✅ link click has been detected");
           clearInterval(pollingInterval);
           res
