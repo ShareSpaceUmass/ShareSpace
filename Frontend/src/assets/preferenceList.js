@@ -17,7 +17,7 @@ const basicPreferences = [
     {
         key: "academics",
         name: "How important are academics to you?",
-        values: ["Not Important", "Somewhat Important", "Very Important"],
+        values: ["Not Important", "Somewhat Important", "Important", "Very Important"],
     },
     {
         key: "inRoom",
@@ -25,15 +25,15 @@ const basicPreferences = [
         values: ["Rarely", "Somewhat Frequently", "Frequently", "All the Time"],
     },
     {
+        key: "earlyBird",
+        name: "When will you be most active in your room?",
+        values: ["Morning", "Afternoon", "Evening", "Late Night"],
+    },
+    {
         key: "guests",
         name: "How often will you have guests over?",
         values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
     },
-    {
-        key: "roommateGuests",
-        name: "How often can your roommate have guests over?",
-        values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
-    }
 ]
 
 export default basicPreferences

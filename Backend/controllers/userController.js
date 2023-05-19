@@ -83,7 +83,8 @@ const loginUser = async (req, res) => {
       console.log(`waiting for ${req.body.email} to login via email`);
       let pollingInterval = setInterval(() => {
         // check if the user has clicked on the link by checking the cache
-        const linkClicked = cache.get(token);
+        const linkClicked = cache.get(req.body.email);
+        cache.del(req.body.email)
         if (linkClicked) {
           console.log("✅ link click has been detected");
           clearInterval(pollingInterval);
@@ -103,7 +104,7 @@ const loginUser = async (req, res) => {
   }
 
 
-// @desc   Delete an existing user
+// @desc   Delete an existing user from a database based on email
 // @route  DELETE /users/deleteUser
 // @access Private
 const deleteUser = async (req, res) => {
@@ -121,7 +122,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-// @desc   Delete all users
+// @desc   Delete all users from database
 // @route  DELETE /users/deleteAllUsers
 // @access Private
 const deleteAllUsers = async (req, res) => {
@@ -139,7 +140,7 @@ const deleteAllUsers = async (req, res) => {
   }
 };
 
-// @desc   Get user
+// @desc   Get user from the database
 // @route  GET /getUser
 // @access Private
 const getUser = async (req, res) => {
@@ -190,7 +191,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// @desc   Update user data
+// @desc   Update user data based on their email
 // @route  POST /updateUser
 // @access Private
 const updateUserData = async (req, res) => {
@@ -218,7 +219,7 @@ const updateUserData = async (req, res) => {
       where: { email: req.body.email },
     });
     // Send a success message to the client and log the success
-    res.send("Field updated");
+    res.status(200).json({ message: "Field updated successfully." });
     console.log("Field successfully updated.");
   } catch (err) {
     console.error(err);
@@ -266,56 +267,6 @@ const userCompletedPreferences = async (req, res) => {
   }
 }
 
-// @desc   Get all of a user's messages, sorted by most recent
-// @route  GET /getAllMessages
-// @access Private
-const getAllMessages = async (req, res) => {
-  // Find all unread messages sent by the specified senderEmail and sort them by most recent
-  try {
-    const unreadMessages = await Messages.findAll({
-      where: {
-        senderEmail: req.body.senderEmail,
-        read: false
-      },
-      order: [
-        ['updatedAt', 'DESC']
-      ]
-    });
-    // Send all unread messages to the client
-    res.send(messages);
-  } catch (err) {
-    // Handle any errors that occur while retrieving messages
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching all unread messages." });
-  }
-};
-
-// @desc   Adds a message to the table
-// @route  POST /addMessage
-// @access Public
-const addMessage = async (req, res) => {
-  try {
-    // Create a new message with the specified properties
-    const message = {
-      senderEmail: req.body.senderEmail,
-      receiverEmail: req.body.receiverEmail,
-      content: req.body.conten,
-      read: false
-    };
-    // Add the new message to the database
-    await Messages.create(message);
-    res.status(200).json({ message: "User message added succesfully" });
-  } catch (err) {
-    // Handle any errors that occur while adding the new message to the database
-    console.error(err);
-    res
-      .status(500)
-      .json({ message: "An error occurred while adding user preferences." });
-  }
-};
-
 // Exporting an object with all the defined functions as properties to make them available to other modules
 module.exports = {
   registerUser,
@@ -325,7 +276,5 @@ module.exports = {
   deleteAllUsers,
   getUser,
   getAllUsers,
-  userCompletedPreferences,
-  getAllMessages,
-  addMessage
+  userCompletedPreferences
 };

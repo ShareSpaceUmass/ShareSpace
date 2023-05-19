@@ -35,8 +35,7 @@ app.get("/verify", async (req, res) => {
   console.log("Verifying login from email..."); // Log message for verifying login
   const token = req.query.token; // Retrieve token from the query parameter
   if (token == null) res.sendStatus(401); // Send 401 error if no token is provided
-
-  cache.set(token, true); // Cache the token
+  cache.set(req.query.email, true); // Cache the token
   console.log(`${req.query.email} clicked thier login link`); // Log message for login link click
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // Verify the token using the JWT_SECRET environment variable
@@ -54,6 +53,7 @@ app.get("/verify", async (req, res) => {
     res.sendStatus(401); // Send 401 error if verification fails
   }
   window.close(); // Close window
-});
+  }// Close window
+);
 
 module.exports = app; // export app for testing purposes
