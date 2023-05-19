@@ -19,53 +19,7 @@ import Header2 from "../components/Header2";
 import basicPreferences from "../assets/preferenceList";
 
 
-//Preferences and interests
-const basicPreferences = [
-    {
-        key: "noise",
-        name: "Noise Level",
-        values: ["Quiet", "Some Noise", "Loud"],
-        chosen: ""
-    },
-    {
-        key: "cleanliness",
-        name: "Cleanliness",
-        values: ["Messy", "Somewhat Organized", "Organized", "Spotless"],
-        chosen: ""
-    },
-    {
-        key: "closeness",
-        name: "How close would you like to be with your roommate?",
-        values: ["Not Close", "Acquaintances", "Friendly", "Good Friends"],
-        chosen: ""
-    },
-    {
-        key: "academics",
-        name: "How important are academics to you?",
-        values: ["Not Important", "Somewhat Important", "Very Important"],
-        chosen: ""
-    },
-    {
-        key: "inRoom",
-        name: "How frequently will you be in your room?",
-        values: ["Rarely", "Somewhat Frequently", "Frequently", "All the Time"],
-        chosen: ""
-    },
-    {
-        key: "guests",
-        name: "How often will you have guests over?",
-        values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
-        chosen: ""
-    },
-    {
-        key: "roommateGuests",
-        name: "How often can your roommate have guests over?",
-        values: ["Never", "Once in a While", "Only on Weekends", "All the Time"],
-        chosen: ""
-    }
-]
-
-
+//Tnterests
 const interests = [
     {
         key: "sports",
