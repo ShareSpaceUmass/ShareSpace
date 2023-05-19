@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import logo from '../public/images/ShareSpaceLogo.png'
 
+//Rwnders the navbar
 const Nav = () => {
     return (
         <header class="bg-gradient-to-b from-[#ffffff] to-[#fbe2ff61]">

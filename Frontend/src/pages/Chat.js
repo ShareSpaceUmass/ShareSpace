@@ -6,7 +6,7 @@ import { InChat, OutChat } from "../components/chatbox-components/ChatBoxes";
 import Aos from "aos";
 import Header2 from "../components/Header2";
 
-
+//Function that renders chat-ui layout
 function ChatPage() {
     Aos.init({ duration: 1000, offset: 0 });
     return (
