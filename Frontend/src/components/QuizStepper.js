@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Box, Stack, Stepper, Step, StepLabel, Button, Typography, Card, CardActions, CardContent, Radio, RadioGroup, FormControlLabel, FormControl, FormGroup} from '@mui/material';
-import { useState } from 'react';
+import {Box, Grid, Stack, Stepper, Step, StepLabel, Button, Typography, Card, CardActions, CardContent, Radio, RadioGroup, FormControlLabel, FormControl, FormGroup} from '@mui/material';
+import { useState, useEffect } from 'react';
 import Lottie from "lottie-react";
 import noiseAnimation  from "../assets/quiz-animations/noise"
 import cleanAnimation  from "../assets/quiz-animations/cleanliness"
@@ -8,7 +8,7 @@ import closenessAnimation  from "../assets/quiz-animations/closeness"
 import academicsAnimation  from "../assets/quiz-animations/academics"
 import inRoomAnimation from "../assets/quiz-animations/inRoom"
 import guestsAnimation from "../assets/quiz-animations/guests"
-import roomGuestsAnimation from "../assets/quiz-animations/roommateGuests"
+import earlyBirdAnimation from "../assets/quiz-animations/earlyBird"
 import Aos from 'aos';
 import basicPreferences from "../assets/preferenceList";
 
@@ -16,55 +16,88 @@ const steps = ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question
 //list of animations to be transitioned through during the quiz
 const animations = [
   {
-    width: 405,
+    smWidth: 322,
+    medWidth: 405,
     anim: noiseAnimation
   },
   {
-    width: 405,
+    smWidth: 280,
+    medWidth: 405,
     anim: cleanAnimation
   },
   {
-    width: 405,
+    smWidth: 248,
+    medWidth: 405,
     anim: closenessAnimation
   },
   {
-    width: 405,
+    smWidth: 280,
+    medWidth: 405,
     anim: academicsAnimation
   },
   {
-    width: 608,
+    smWidth: 420,
+    medWidth: 608,
     anim: inRoomAnimation
   },
   {
-    width: 720,
-    anim: guestsAnimation
+    smWidth: 280,
+    medWidth: 405,
+    anim: earlyBirdAnimation
   },
   {
-    width: 405,
-    anim: roomGuestsAnimation
+    smWidth: 498,
+    medWidth: 720,
+    anim: guestsAnimation
   }
 ]
 
-export default function QuizStepper() {
+function QuizStepper() {
   //stores preferences for each question (question 1 answer = index 0)
   const [noise, setNoise] = useState("");
   const [cleanliness, setClean] = useState("");
   const [closeness, setCloseness] = useState("");
   const [academics, setAcademics] = useState("");
-  const [inRoom, setinRoom] = useState("");
+  const [timeInRoom, setTimeInRoom] = useState("");
+  const [earlyBird, setEarlyBird] = useState("");
   const [guests, setGuests] = useState("");
-  const [roomGuests, setRoomGuests] = useState("");
   const preferences = [
     {selection: noise, change: setNoise},
     {selection: cleanliness, change: setClean},
     {selection: closeness, change: setCloseness},
     {selection: academics, change: setAcademics},
-    {selection: inRoom, change: setinRoom},
+    {selection: timeInRoom, change: setTimeInRoom},
+    {selection: earlyBird, change: setEarlyBird},
     {selection: guests, change: setGuests},
-    {selection: roomGuests, change: setRoomGuests},
   ];
   //tracks which question the user is on 
   const [activeStep, setActiveStep] = useState(0);
+
+  //assign user's previous answers (if the exist) to the current answers
+  const existingPreferences = () => {
+    const emailJson = null;
+    const user = null;
+    const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: simpleStringify(emailJson)
+    });
+    response.then((res) => {
+      if (res.status === 500) {
+        console.log("User not found!");
+      } else {
+          console.log("User found!");
+          user = res;
+      }
+    })
+
+    preferences.forEach = pref => {
+      pref.change(user.pref.selection);
+    }
+  }
 
   const quizCards = basicPreferences.map((preference) => {
     return (
@@ -86,6 +119,9 @@ export default function QuizStepper() {
                                     }}
                                     onClick={(event) => {
                                       preferences[activeStep].change(event.target.value);
+                                      if (activeStep !== steps.length-1) {
+                                        handleNext();
+                                      }
                                     }
                                     } 
                                     />
@@ -114,33 +150,84 @@ export default function QuizStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSubmit = () => {
-    //submit preferences to backend
+  //sends user's quiz answers to backend
+  const handleSubmit = async () => {
+    const preferencesJson = { noise, cleanliness, closeness, academics, timeInRoom, earlyBird, guests }
+
+    const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/updateUser", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: simpleStringify(preferencesJson)
+    })
+    response.then((res) => {
+      if (res.status === 500) {
+        //if user can't be found user will be send back to login screen
+        //window.location.href = "/login"
+
+        //send user to profile since user route is unfinished (demo purposes)
+        window.location.href = "/profile"
+      }
+      else {
+        //user is sent to their profile once their answers are received by the backend
+        window.location.href = "/profile"
+      }
+    })
   }
 
+
+  const [screenSize, setScreenSize] = useState(getCurrentDimension());
+
+  function getCurrentDimension(){
+    return {
+        width: window.innerWidth,
+        height: window.innerHeight
+    }
+  }
+
+  //screenSize is updated when the window is resized
+  useEffect(() => {
+      const updateDimension = () => {
+          setScreenSize(getCurrentDimension())
+      }
+      window.addEventListener('resize', updateDimension);
+  
+  
+      return(() => {
+          window.removeEventListener('resize', updateDimension);
+      })
+  }, [screenSize]);
+
+  //set current answers to existing preferences
+  existingPreferences();
   return (
     <Stack
     justifyContent="center"
     alignItems="center"
     marginTop = {7.5}
-    sx={{maxWidth: {md: 900},
+    sx={{maxWidth: {xs: 225, md: 900},
     }}
     >
       <Box 
       sx={{
-      width: animations[activeStep].width,
+      width: {xs: animations[activeStep].smWidth, md: animations[activeStep].medWidth}
       }}
       marginBottom = {4}
       >
         <div><Lottie animationData={animations[activeStep].anim} loop={true}/></div>
       </Box>    
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: "100%"}}>
         <Card
-        justifyContent="center"
         sx={{backgroundColor: "transparent"}}
         >
+          <Box
+          justifyContent="center"
+          >
           {quizCards[activeStep]}
+          </Box>
         </Card>
+        {screenSize.width >= 900 ?
         <Stack
         marginTop ={2.5}
         marginBottom = {-0.5}
@@ -158,7 +245,8 @@ export default function QuizStepper() {
               );
             })}
           </Stepper>
-        </Stack>
+        </Stack> : <></>
+        }
         <React.Fragment>
           <Box 
           sx={{ display: 'flex', flexDirection: 'row', pt: 2,}}
@@ -189,7 +277,6 @@ export default function QuizStepper() {
             </Button> :
             <Button onClick={handleSubmit}
             disabled={preferences[activeStep].selection === ""}
-            href="/profile"
             sx={{
               width: {md:200},
               ml: {md: 2}
@@ -204,3 +291,24 @@ export default function QuizStepper() {
     </Stack>
   );
 }
+
+function simpleStringify(object) {
+  // stringify an object, avoiding circular structures
+  // https://stackoverflow.com/a/31557814
+  var simpleObject = {};
+  for (var prop in object) {
+      if (!object.hasOwnProperty(prop)) {
+          continue;
+      }
+      if (typeof (object[prop]) == 'object') {
+          continue;
+      }
+      if (typeof (object[prop]) == 'function') {
+          continue;
+      }
+      simpleObject[prop] = object[prop];
+  }
+  return JSON.stringify(simpleObject); // returns cleaned up JSON
+};
+
+export default QuizStepper

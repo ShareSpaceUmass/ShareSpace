@@ -16,6 +16,8 @@ import Lottie from "lottie-react";
 import preferencesAnim from "../assets/preferences-anim.json";
 import Aos from 'aos';
 import Header2 from "../components/Header2";
+import basicPreferences from "../assets/preferenceList";
+
 
 //Preferences and interests
 const basicPreferences = [
@@ -63,13 +65,14 @@ const basicPreferences = [
     }
 ]
 
+
 const interests = [
     {
         key: "sports",
         name: "What sports do you like?",
         values: ["Basketball", "Football", "Soccer", "Rugby", "Hockey", "Baseball", "Cross Country", "Track/Field", "Lacrosse",
         "Field Hockey", "Swimming", "Golf", "Ultimate Frisbee", "Climbing", "Cheer", "Gymnastics", "Snowboarding", "Skiing",
-        "Surfing", "Dance", "Frisbee Golf"],
+        "Surfing", "Dance", "Frisbee Golf", "Tennis"],
         chosen: []
     },
     {
