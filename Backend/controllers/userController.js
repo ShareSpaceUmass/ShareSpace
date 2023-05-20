@@ -98,8 +98,7 @@ const loginUser = async (req, res) => {
       console.log("❌ Error logging in");
       return res
         .status(500)
-        .json({ error: "Error logging in. Please try again" }); //not entirely sure how to connect to frontend, but I think we use this to send
-      //json with this message up the chain
+        .json({ error: "Error logging in. Please try again" }); 
     }
   }
 
