@@ -13,6 +13,7 @@ function SignupPage() {
   const [validEmail, setValidEmail] = useState(false)
   const [usedEmail, setUsedEmail] = useState(false)
 
+  //Alert that is displayed if email is registered.
   function emailError(error) {
     if (error) {
       return (
@@ -29,20 +30,22 @@ function SignupPage() {
     }
   }
 
+  //Checks to make sure email is a umass email.
   const checkEmail = async (input) => {
     setEmail(input)
     setUsedEmail(false)
     setValidEmail(!input.endsWith("@umass.edu"))
   }
 
-
+  //Check for missing data
   const missingInfo = () => {
     return (fName === '') || (lName === '') || (email === '') || (gender === '')
   }
 
+  //Click handler for the register button
   const register = async () => {
     const user = { fName, lName, email, gender }
-
+    //Fetch request that users the /users/ route to register a user
     const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/", {
       method: 'POST',
       headers: {
@@ -51,7 +54,7 @@ function SignupPage() {
       body: JSON.stringify(user)
     })
     response.then((res) => {
-      if (res.status === 500) {
+      if (res.status === 500) { //If status code is 500 this means that email is already registered
         setUsedEmail(true)
       }
       else {

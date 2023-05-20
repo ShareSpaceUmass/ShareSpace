@@ -1,3 +1,4 @@
+//Preferences list
 const basicPreferences = [
     {
         key: "noise",

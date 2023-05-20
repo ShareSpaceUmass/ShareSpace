@@ -19,7 +19,7 @@ import Header2 from "../components/Header2";
 import basicPreferences from "../assets/preferenceList";
 
 
-
+//Tnterests
 const interests = [
     {
         key: "sports",
@@ -38,6 +38,7 @@ const interests = [
     }
 ]
 
+//Renders the prefrence list
 const preferenceList = basicPreferences.map((preference) => {
     return (
         <Box key={preference.key}>
@@ -69,6 +70,7 @@ const preferenceList = basicPreferences.map((preference) => {
 }
 )
 
+//Renders the interest list
 const interestList = interests.map((interest) => {
     return (
         <Box 
@@ -104,6 +106,7 @@ const interestList = interests.map((interest) => {
 }
 )
 
+//Render the preference page layout
 function PreferencePage() {
     Aos.init({ duration: 1800, offset: 0 });
     return (

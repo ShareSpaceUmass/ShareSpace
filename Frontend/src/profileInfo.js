@@ -1,3 +1,5 @@
+//Sample profile data
+
 export const ProfileData = {
     Name: 'Harry Potter',
     UserName: 'hpotter',

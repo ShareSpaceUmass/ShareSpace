@@ -2,6 +2,7 @@ import React from 'react'
 import Header2 from '../components/Header2'
 import { ProfileData } from '../profileInfo'
 
+//Renders a profile page dynamically given user DATA !MUST BE UPDATED TO ACCEPT USER DATA!
 function Profile() {
     const { Name, UserName, Gender, Year, Age, Major, Cleanliness, Guests, TimeSpent, Noise, Pets, Lifestyle } = ProfileData
     return (

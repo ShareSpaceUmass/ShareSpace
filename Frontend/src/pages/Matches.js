@@ -7,6 +7,7 @@ import "./Matches.css"
 import TinderCard from 'react-tinder-card'
 import { useState } from 'react'
 
+//Dynamically render matches that appear given user data
 function Matches() {
     const classStr = "bg-gray-100 rounded-md w-full p-1 my-1"
     return (

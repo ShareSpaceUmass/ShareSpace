@@ -42,7 +42,7 @@ function LoginPage() {
     const handleClick = async () => {
         const emailJson = { email }
 
-        //Checks if email is a registered email
+        //Checks if email is a registered email using "/users/getUser/"
         
         const response = fetch(process.env.REACT_APP_SERVER_URL + "/users/getUser/", {
             method: 'POST',
@@ -61,7 +61,7 @@ function LoginPage() {
             }
         })
         
-
+        //if user email is used we attempt to login the user.
         if (usedEmail === false) {
         const sendEmail = fetch(process.env.REACT_APP_SERVER_URL + "/users/login/", {
             method: 'POST',
@@ -72,8 +72,7 @@ function LoginPage() {
             body: simpleStringify(emailJson)
         })
         sendEmail.then((res) => {
-            if (res.status === 200) {
-                console.log(res)
+            if (res.status === 200) { //returns status code 200 if the link in the email was clicked
                 return res.json()
             }
             else {
@@ -81,7 +80,7 @@ function LoginPage() {
             }
         })
             .then((response) => {
-                console.log(response)
+                //Set cookie for token and emai !THIS IS INSECURE MUST BE CHANGED!
                 setCookie('token', response.token, { path: '/' })
                 setCookie('email', email, { path: '/' })
                 window.location.href = "/quiz"
